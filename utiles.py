@@ -6,7 +6,7 @@ def obtener_color(color):
         "Defecto": "\x1b[39m"
     }
     return colores[color]
-#AAbfdsfsd
+#AAbfdsfs
 
 def obtener_palabras_validas():
     return ["abran", "abria", "acojo", "actuo", "aguda", "agudo", "algas", \
