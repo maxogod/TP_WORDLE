@@ -9,6 +9,8 @@ def validar_aciertos(palabra_a_adivinar, palabra_arriesgada):
     '''
 
     palabra_pintada = ""
+    palabra_a_adivinar = palabra_a_adivinar.upper()
+    palabra_arriesgada = palabra_arriesgada.upper()
 
     for letra in range(len(palabra_a_adivinar)):
         if (palabra_arriesgada[letra] in palabra_a_adivinar and palabra_arriesgada[letra] == palabra_a_adivinar[letra]):
@@ -28,4 +30,5 @@ palabra_arriesgada = "prsnO"
 palabra = validar_aciertos(palabra_a_adivinar, palabra_arriesgada)
 
 print(palabra)
+
 
