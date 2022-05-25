@@ -73,7 +73,7 @@ def validar_palabra(palabra):
             print('Error, el arriezgo debe tener la misma cantidad de letras que la palabra que se intenta adivinar')
         elif not palabra.isalpha():
             print('Error, el arriezgo deben ser todas letras')
-        palabra = imprimir_interfaz(palabra)
+        palabra = imprimir_interfaz()
     palabra = sin_acentos(palabra)
     return palabra
 
