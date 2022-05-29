@@ -100,7 +100,7 @@ def validar_palabra(palabra):
             print('Error, el arriezgo debe tener la misma cantidad de letras que la palabra que se intenta adivinar')
         elif not palabra.isalpha():
             print('Error, el arriezgo deben ser todas letras')
-        palabra = imprimir_interfaz()
+        palabra = input("Arriesgo: ").upper()
     palabra = sin_acentos(palabra)
     return palabra
 
@@ -110,19 +110,19 @@ def sin_acentos(palabra):
     palabra_1 = palabra.lower()
     for letra in palabra_1: 
         if letra == vocales[0]:
-            palabra = palabra_1.replace(letra,vocales_1[0])   
+            palabra_1 = palabra_1.replace(letra,vocales_1[0])   
         elif letra == vocales[1]:
-            palabra = palabra_1.replace(letra,vocales_1[1])
+            palabra_1 = palabra_1.replace(letra,vocales_1[1])
         elif letra == vocales[2]:
-            resulpalabratado = palabra_1.replace(letra,vocales_1[2])
+            palabra_1 = palabra_1.replace(letra,vocales_1[2])
         elif letra == vocales[3]:
-            palabra = palabra_1.replace(letra,vocales_1[3])
+            palabra_1 = palabra_1.replace(letra,vocales_1[3])
         elif letra == vocales[4]:
-            palabra = palabra_1.replace(letra,vocales_1[4])
+            palabra_1 = palabra_1.replace(letra,vocales_1[4])
         else:
             pass
             
-    return palabra.upper()
+    return palabra_1.upper()
 
 
 def logica_juego():
@@ -132,19 +132,19 @@ def logica_juego():
     estado_partida = False
     tablero = crear_tablero()
 
-    while (intentos <= CANTIDAD_LETRAS and not estado_partida):
+    while (intentos < CANTIDAD_LETRAS and not estado_partida):
         arriesgo = imprimir_interfaz(palabra_oculta, tablero)
         arriesgo = validar_palabra(arriesgo)
         arriesgo = validar_aciertos(palabra_adivinar, arriesgo)
         palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo)
         tablero = actualizar_tablero(tablero, intentos, arriesgo)
         estado_partida = definir_victoria(arriesgo)
-        if(estado_partida):
+        if(estado_partida or (intentos == CANTIDAD_LETRAS-1) ):
             tablero = actualizar_tablero(tablero, intentos, arriesgo)
-            arriesgo = imprimir_interfaz(palabra_oculta, tablero, estado_partida)
+            arriesgo = imprimir_interfaz(palabra_oculta, tablero, True)
         intentos += 1
     
-    print('Ganaste!') if (estado_partida) else print("Perdiste")
+    print('Ganaste!') if (estado_partida) else print("Perdiste!")
 
 
 
