@@ -4,32 +4,59 @@ import random
 
 CANTIDAD_LETRAS = 5 #CONSULTAR ALCANCE VARIABLE/VARIABLE GLOBAL
 
-def imprimir_interfaz():
+def ocultar_letras_no_adivinadas(palabra, arriesgo):
+    letras = ""
+    arriesgo = arriesgo.split(' ')
+
+    for letra in range(len(palabra)):
+        if ((len(arriesgo) >1 ) and (obtener_color("Verde") in arriesgo[letra])):
+            letras += palabra[letra] + ' '
+        else: 
+            letras += '? '
+
+    return letras
+
+def crear_tablero():
     tablero = []
-    print("Palabra a adivinar: {} ".format('?'*CANTIDAD_LETRAS))
-    for i in range(CANTIDAD_LETRAS):
-        tablero.append(['?' for l in range(5)])
+    for i in range (CANTIDAD_LETRAS):
+        tablero.append('? '*CANTIDAD_LETRAS)
     
+    return tablero
+
+def actualizar_tablero(tablero, intentos, arriesgo):
+
+    tablero[intentos] = arriesgo
+    
+    return tablero
+
+def imprimir_interfaz(palabra, tablero, estado_partida = False):
+    
+    print("Palabra a adivinar: {} ".format(palabra))
+
     for celda in tablero:
+        aux = " ".join(celda)
+        print(celda)
 
-        print(" ".join(celda))
-
-    texto = input("Arriesgo: ").upper()
-   
+    if (estado_partida):
+        texto = print("Arriesgo: ")
+    else:
+        texto = input("Arriesgo: ").upper()
+        
 
     return texto
 
 def selecciona_palabra():
     lista=obtener_palabras_validas()
-    return lista[random.randint(0, len(lista))].upper()
+    #return lista[random.randint(0, len(lista))].upper()
+    return lista[56].upper()
 
 def definir_victoria(palabra):
     cont=0
     palabra = palabra.split(' ')
     estado = False
 
-    for letra in palabra:
-        if obtener_color("Verde") in letra:
+    for i in palabra:
+        if obtener_color("Verde") in i:
             cont+=1
     if cont==CANTIDAD_LETRAS:
         estado = True
@@ -101,19 +128,23 @@ def sin_acentos(palabra):
 def logica_juego():
     intentos = 0
     palabra_adivinar = selecciona_palabra()
+    palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, '')
     estado_partida = False
+    tablero = crear_tablero()
 
-    while (intentos < CANTIDAD_LETRAS and not estado_partida):
-        arriesgo = imprimir_interfaz()
+    while (intentos <= CANTIDAD_LETRAS and not estado_partida):
+        arriesgo = imprimir_interfaz(palabra_oculta, tablero)
         arriesgo = validar_palabra(arriesgo)
         arriesgo = validar_aciertos(palabra_adivinar, arriesgo)
-
-        print(arriesgo)
-
+        palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo)
+        tablero = actualizar_tablero(tablero, intentos, arriesgo)
         estado_partida = definir_victoria(arriesgo)
+        if(estado_partida):
+            tablero = actualizar_tablero(tablero, intentos, arriesgo)
+            arriesgo = imprimir_interfaz(palabra_oculta, tablero, estado_partida)
         intentos += 1
-
-    print('Ganaste') if (estado_partida) else print("Perdiste")
+    
+    print('Ganaste!') if (estado_partida) else print("Perdiste")
 
 
 
