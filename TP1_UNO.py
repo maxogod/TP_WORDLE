@@ -1,6 +1,6 @@
 from utiles import obtener_color, obtener_palabras_validas
 import random
-import time
+from datetime import datetime
 
 CANTIDAD_LETRAS = 5 #CONSULTAR ALCANCE VARIABLE/VARIABLE GLOBAL
 CANTIDAD_INTENTOS = 5
@@ -73,7 +73,7 @@ def definir_victoria(arriesgo):
 
 def validar_aciertos(palabra_adivinar, arriesgo):
     """
-    Recibe la palabra a adivinar y la palabra ingresada por el usuario, ambas en mayusculas. 
+    Recibe la palabra a adivinar y la palabra ingresada por el usuario, ambas en mayusculas.
     Retorna la palabra arriesgada, cada letra con su color correspondiente segun
     si esta en la palabra a adivinar y en la posicion adecuada (verde),
     si aparece en la palabra a adivinar pero en otra posicion (amarillo)
@@ -149,6 +149,7 @@ def logica_juego():
     """
 
     intentos = 0
+    time_start = datetime.now()
     palabra_adivinar = selecciona_palabra().upper()
     palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, '')
     estado_partida = False
@@ -164,11 +165,16 @@ def logica_juego():
         if estado_partida or (intentos == CANTIDAD_INTENTOS -1):
             tablero = actualizar_tablero(tablero, intentos, arriesgo)
             imprimir_interfaz(palabra_oculta, tablero, fin = True)
+            time_end = datetime.now()
         intentos += 1
-    
-    print('Ganaste!') if (estado_partida) else print("Perdiste!")
-    print(f'Palabra: {palabra_adivinar}')
 
+    delta_time = time_end - time_start
+    mins = int(delta_time.total_seconds() / 60)
+    secs = int(delta_time.total_seconds() - (60 * mins))
+
+    print(f'Ganaste! Y te tomo {mins} minutos y {secs} segundos.') \
+        if estado_partida else print("Perdiste!")
+    print(f'Palabra: {palabra_adivinar}')
 
 
 logica_juego()
