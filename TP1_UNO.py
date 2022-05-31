@@ -1,22 +1,24 @@
-from utiles import obtener_color, obtener_palabras_validas
+# from utiles import obtener_color, obtener_palabras_validas
 import random
 from datetime import datetime
 
 CANTIDAD_LETRAS = 5 #CONSULTAR ALCANCE VARIABLE/VARIABLE GLOBAL
 CANTIDAD_INTENTOS = 5
 
-def ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo):
+def ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo, palabra_oculta):
     #debug que si se adivina la letra y el proximo intento
     #falla la letra esa letra es reemplazada por ?
     letras = ""
-    arriesgo = arriesgo.split(' ')
+    lista_arriesgo = arriesgo.split(' ')
+    palabra = palabra_oculta.split(' ')
 
     for letra in range(len(palabra_adivinar)):
-        if (len(arriesgo) > 1 ) and (obtener_color("Verde") in arriesgo[letra]):
-            letras += palabra_adivinar[letra] + ' '
-        else: 
-            letras += '? '
 
+        if (obtener_color("Verde") not in lista_arriesgo[letra] and palabra[letra] == '?'):
+            letras += '? '
+        else: 
+            letras += palabra_adivinar[letra] + ' '
+            
     return letras
 
 def crear_tablero():
@@ -55,8 +57,9 @@ def imprimir_interfaz(palabra_oculta, tablero, fin = False):
     return texto
 
 def selecciona_palabra():
-    lista=obtener_palabras_validas()
-    return lista[random.randint(0, len(lista))].upper()
+    # lista=obtener_palabras_validas()
+    # return lista[random.randint(0, len(lista))].upper()
+    return "ceros".upper()
 
 def definir_victoria(arriesgo):
     cont=0
@@ -81,7 +84,7 @@ def contar_letras(palabra):
 
     return diccionario
 
-def validar_aciertos(palabra_adivinar, arriesgo):
+def validar_aciertos(palabra_a_adivinar, arriesgo):
     """
     Recibe la palabra a adivinar y la palabra ingresada por el usuario, ambas en mayusculas.
     Retorna la palabra arriesgada, cada letra con su color correspondiente segun
@@ -102,8 +105,6 @@ def validar_aciertos(palabra_adivinar, arriesgo):
 
     for indice in range(len(arriesgo)):
         if (arriesgo[indice] in palabra_a_adivinar and arriesgo[indice] != palabra_a_adivinar[indice] and ((palabra.count(obtener_color("Amarillo") + arriesgo[indice]) + (palabra.count(obtener_color("Verde") + arriesgo[indice]))) < cantidad_letras[arriesgo[indice]])): 
-            print(palabra.count(obtener_color("Amarillo") + arriesgo[indice]))
-            print(palabra.count(obtener_color("Verde") + arriesgo[indice]))
             palabra = palabra.replace(obtener_color("GrisOscuro") + arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) +  " "
     
     palabra += obtener_color("Defecto")
@@ -158,8 +159,8 @@ def logica_juego():
 
     intentos = 0
     time_start = datetime.now()
-    palabra_adivinar = selecciona_palabra().upper()
-    palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, '')
+    palabra_adivinar = selecciona_palabra()
+    palabra_oculta = "? " * CANTIDAD_LETRAS
     estado_partida = False
     tablero = crear_tablero()
 
@@ -167,7 +168,7 @@ def logica_juego():
         arriesgo = imprimir_interfaz(palabra_oculta, tablero)
         arriesgo = validar_palabra(arriesgo)
         arriesgo = validar_aciertos(palabra_adivinar, arriesgo)
-        palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo)
+        palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo, palabra_oculta)
         tablero = actualizar_tablero(tablero, intentos, arriesgo)
         estado_partida = definir_victoria(arriesgo)
         if estado_partida or (intentos == CANTIDAD_INTENTOS -1):
@@ -183,6 +184,3 @@ def logica_juego():
     print(f'Ganaste! Y te tomo {mins} minutos y {secs} segundos.') \
         if estado_partida else print("Perdiste!")
     print(f'Palabra: {palabra_adivinar}')
-
-
-logica_juego()
