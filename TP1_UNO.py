@@ -1,4 +1,4 @@
-# from utiles import obtener_color, obtener_palabras_validas
+from utiles import obtener_color, obtener_palabras_validas
 import random
 from datetime import datetime
 
@@ -57,9 +57,8 @@ def imprimir_interfaz(palabra_oculta, tablero, fin = False):
     return texto
 
 def selecciona_palabra():
-    # lista=obtener_palabras_validas()
-    # return lista[random.randint(0, len(lista))].upper()
-    return "ceros".upper()
+    lista=obtener_palabras_validas()
+    return lista[random.randint(0, len(lista))].upper()
 
 def definir_victoria(arriesgo):
     cont=0
@@ -94,22 +93,22 @@ def validar_aciertos(palabra_a_adivinar, arriesgo):
     Cada letra esta separada por espacios para mejor lectura.
     """
     cantidad_letras = contar_letras(palabra_a_adivinar)
-    palabra = ''
+    palabra_pintada = ''
 
     for indice in range(len(arriesgo)):           
         if (arriesgo[indice] == palabra_a_adivinar[indice]):
-            palabra += obtener_color("Verde") + arriesgo[indice] +  " "
+            palabra_pintada += obtener_color("Verde") + arriesgo[indice] +  " "
     
         else:
-            palabra += obtener_color("GrisOscuro") + arriesgo[indice] + " "
+            palabra_pintada += obtener_color("GrisOscuro") + arriesgo[indice] + " "
 
     for indice in range(len(arriesgo)):
-        if (arriesgo[indice] in palabra_a_adivinar and arriesgo[indice] != palabra_a_adivinar[indice] and ((palabra.count(obtener_color("Amarillo") + arriesgo[indice]) + (palabra.count(obtener_color("Verde") + arriesgo[indice]))) < cantidad_letras[arriesgo[indice]])): 
-            palabra = palabra.replace(obtener_color("GrisOscuro") + arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) +  " "
+        if (arriesgo[indice] in palabra_a_adivinar and arriesgo[indice] != palabra_a_adivinar[indice] and ((palabra_pintada.count(obtener_color("Amarillo") + arriesgo[indice]) + (palabra_pintada.count(obtener_color("Verde") + arriesgo[indice]))) < cantidad_letras[arriesgo[indice]])): 
+            palabra_pintada = palabra_pintada.replace(obtener_color("GrisOscuro") + arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) +  " "
     
-    palabra += obtener_color("Defecto")
+    palabra_pintada += obtener_color("Defecto")
 
-    return palabra
+    return palabra_pintada
 
 def validar_palabra(arriesgo):
     """
@@ -184,3 +183,6 @@ def logica_juego():
     print(f'Ganaste! Y te tomo {mins} minutos y {secs} segundos.') \
         if estado_partida else print("Perdiste!")
     print(f'Palabra: {palabra_adivinar}')
+
+
+logica_juego()
