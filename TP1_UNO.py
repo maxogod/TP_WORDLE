@@ -71,6 +71,16 @@ def definir_victoria(arriesgo):
 
     return estado_partida
 
+def contar_letras(palabra):
+    diccionario = {}
+    for letra in palabra:
+        if letra not in diccionario.keys():
+            diccionario[letra] = 1
+        else:
+            diccionario[letra] += 1
+
+    return diccionario
+
 def validar_aciertos(palabra_adivinar, arriesgo):
     """
     Recibe la palabra a adivinar y la palabra ingresada por el usuario, ambas en mayusculas.
@@ -80,27 +90,25 @@ def validar_aciertos(palabra_adivinar, arriesgo):
     o si no esta en la palabra (gris oscuro).
     Cada letra esta separada por espacios para mejor lectura.
     """
-    #BUG - si alguien pone 'aaaaa' y hay por ejemplo una 'a' en la palabra
-    #no se pinta ninguna letra
-    palabra_pintada = ""
+    cantidad_letras = contar_letras(palabra_a_adivinar)
+    palabra = ''
 
-    for letra in range(CANTIDAD_LETRAS):
-        if (arriesgo[letra] in palabra_adivinar and
-                arriesgo[letra] == palabra_adivinar[letra] and
-                palabra_adivinar.count(arriesgo[letra]) <= arriesgo.count(arriesgo[letra])):
-            palabra_pintada += obtener_color("Verde") + arriesgo[letra] + " "
-
-        elif (arriesgo[letra] in palabra_adivinar and
-              arriesgo[letra] != palabra_adivinar[letra] and
-              palabra_adivinar.count(arriesgo[letra]) == arriesgo.count(arriesgo[letra])):
-            palabra_pintada += obtener_color("Amarillo") + arriesgo[letra] + " "
-
+    for indice in range(len(arriesgo)):           
+        if (arriesgo[indice] == palabra_a_adivinar[indice]):
+            palabra += obtener_color("Verde") + arriesgo[indice] +  " "
+    
         else:
-            palabra_pintada += obtener_color("GrisOscuro") + arriesgo[letra] + " "
+            palabra += obtener_color("GrisOscuro") + arriesgo[indice] + " "
 
-    palabra_pintada += obtener_color("Defecto")
+    for indice in range(len(arriesgo)):
+        if (arriesgo[indice] in palabra_a_adivinar and arriesgo[indice] != palabra_a_adivinar[indice] and ((palabra.count(obtener_color("Amarillo") + arriesgo[indice]) + (palabra.count(obtener_color("Verde") + arriesgo[indice]))) < cantidad_letras[arriesgo[indice]])): 
+            print(palabra.count(obtener_color("Amarillo") + arriesgo[indice]))
+            print(palabra.count(obtener_color("Verde") + arriesgo[indice]))
+            palabra = palabra.replace(obtener_color("GrisOscuro") + arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) +  " "
+    
+    palabra += obtener_color("Defecto")
 
-    return palabra_pintada
+    return palabra
 
 def validar_palabra(arriesgo):
     """
