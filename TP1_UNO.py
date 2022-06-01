@@ -2,20 +2,22 @@ from utiles import obtener_color, obtener_palabras_validas
 import random
 from datetime import datetime
 
-CANTIDAD_LETRAS = 5 #CONSULTAR ALCANCE VARIABLE/VARIABLE GLOBAL
+#Variables globales
+CANTIDAD_LETRAS = 5
 CANTIDAD_INTENTOS = 5
 
 def ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo, palabra_oculta):
-    #debug que si se adivina la letra y el proximo intento
-    #falla la letra esa letra es reemplazada por ?
-    #Lo probe y está funcionando bien. Me parece que el bug estaría solucionado
+    """
+    Oculta las letras de la palabra que no estan en el arriesgo o no estan
+    bien posicionadas y pone '? '
+    """
     letras = ""
     lista_arriesgo = arriesgo.split(' ')
     palabra = palabra_oculta.split(' ')
 
     for letra in range(len(palabra_adivinar)):
 
-        if (obtener_color("Verde") not in lista_arriesgo[letra] and palabra[letra] == '?'):
+        if obtener_color("Verde") not in lista_arriesgo[letra] and palabra[letra] == '?':
             letras += '? '
         else: 
             letras += palabra_adivinar[letra] + ' '
@@ -45,7 +47,8 @@ def actualizar_tablero(tablero, intentos, arriesgo):
 
 def imprimir_interfaz(palabra_oculta, tablero, fin = False):  
     #Me gusta más esta versión como imprime el arriesgo final que la que está en el pdf del TP.
-    #Habría que ver si nos dejan que sea un poquito distinta a lo que muestra la consigna. De ultima la cambiamos para la segunda parte. 
+    #Habría que ver si nos dejan que sea un poquito distinta a lo que muestra la consigna.
+    #De ultima la cambiamos para la segunda parte.
     
     print(f"Palabra a adivinar: {palabra_oculta}")
 
@@ -76,9 +79,14 @@ def definir_victoria(arriesgo):
 
     return estado_partida
 
-def contar_letras(palabra):
+def contar_letras(palabra_adivinar):
+    """
+    Funcion ayudante de (validar_aciertos), devuelve un diccionario
+    con las letras de la palabra como claves y con valores = cantidad de veces
+    que esa letra esta en la palabra.
+    """
     diccionario = {}
-    for letra in palabra:
+    for letra in palabra_adivinar:
         if letra not in diccionario.keys():
             diccionario[letra] = 1
         else:
@@ -86,7 +94,7 @@ def contar_letras(palabra):
 
     return diccionario
 
-def validar_aciertos(palabra_a_adivinar, arriesgo):
+def validar_aciertos(palabra_adivinar, arriesgo):
     """
     Recibe la palabra a adivinar y la palabra ingresada por el usuario, ambas en mayusculas.
     Retorna la palabra arriesgada, cada letra con su color correspondiente segun
@@ -95,19 +103,25 @@ def validar_aciertos(palabra_a_adivinar, arriesgo):
     o si no esta en la palabra (gris oscuro).
     Cada letra esta separada por espacios para mejor lectura.
     """
-    cantidad_letras = contar_letras(palabra_a_adivinar)
+    cantidad_letras = contar_letras(palabra_adivinar)
     palabra_pintada = ''
 
     for indice in range(len(arriesgo)):           
-        if (arriesgo[indice] == palabra_a_adivinar[indice]):
+        if arriesgo[indice] == palabra_adivinar[indice]:
             palabra_pintada += obtener_color("Verde") + arriesgo[indice] +  " "
     
         else:
             palabra_pintada += obtener_color("GrisOscuro") + arriesgo[indice] + " "
 
     for indice in range(len(arriesgo)):
-        if (arriesgo[indice] in palabra_a_adivinar and arriesgo[indice] != palabra_a_adivinar[indice] and ((palabra_pintada.count(obtener_color("Amarillo") + arriesgo[indice]) + (palabra_pintada.count(obtener_color("Verde") + arriesgo[indice]))) < cantidad_letras[arriesgo[indice]])): 
-            palabra_pintada = palabra_pintada.replace(obtener_color("GrisOscuro") + arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) +  " "
+        if (arriesgo[indice] in palabra_adivinar and
+                arriesgo[indice] != palabra_adivinar[indice] and
+                ((palabra_pintada.count(obtener_color("Amarillo") + arriesgo[indice]) +
+                  (palabra_pintada.count(obtener_color("Verde") + arriesgo[indice]))
+                 ) < cantidad_letras[arriesgo[indice]])):
+            palabra_pintada = palabra_pintada.replace(
+                obtener_color("GrisOscuro") +
+                arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) +  " "
     
     palabra_pintada += obtener_color("Defecto")
 
@@ -133,7 +147,8 @@ def validar_palabra(arriesgo):
 
 def sin_acentos(arriesgo):
     #Me parece mejor esta versión que la otra con dos for. 
-    #Voy a inverstigar lo que nos comentó el profe de la resta de codigos ASCII, pero para la primera entrega me parece que esta quedaría mejor. 
+    #Voy a inverstigar lo que nos comentó el profe de la resta de codigos ASCII,
+    #pero para la primera entrega me parece que esta quedaría mejor.
     #La propongo para la segunda parte lo del ASCII.
 
     vocales = 'áéíóú'
@@ -164,7 +179,7 @@ def logica_juego():
 
     intentos = 0
     time_start = datetime.now()
-    palabra_adivinar = selecciona_palabra()  #Le saqué el .upper() porque la función ya lo hace en el return
+    palabra_adivinar = selecciona_palabra()
     palabra_oculta = "? " * CANTIDAD_LETRAS
     estado_partida = False
     tablero = crear_tablero()
@@ -191,4 +206,15 @@ def logica_juego():
     print(f'Palabra: {palabra_adivinar}')
 
 
-logica_juego()
+def rejugabilidad():
+    jugar_denuevo = True
+    while jugar_denuevo:
+        logica_juego()
+        desea_seguir = (input('Jugar denuevo (S/N): ')).upper()
+        while desea_seguir not in 'SN':
+            desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
+        if desea_seguir == 'N':
+            jugar_denuevo = False
+            print('Gracias por jugar!')
+
+rejugabilidad()
