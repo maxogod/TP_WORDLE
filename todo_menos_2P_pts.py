@@ -207,8 +207,10 @@ def logica_juego():
 
 
 def rejugabilidad():
+    print('\n~ WELCOME TO WORDLE ~')
     jugar_denuevo = True
     while jugar_denuevo:
+        print('')
         logica_juego()
         desea_seguir = (input('Jugar denuevo (S/N): ')).upper()
         while desea_seguir not in 'SN':
