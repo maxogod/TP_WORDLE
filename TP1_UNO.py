@@ -308,6 +308,8 @@ def rejugabilidad():
 def puntos_jugadores(intentos_A, intentos_B, Jugador_arranca, ganador, cantidad_de_partidas):
     puntos_obtenidos_A = 0
     cantidad_de_partidas_1 = 0
+    #    acumulador_A_por_patidas = puntos_obtenidos_A
+    #    acumulador_B_por_partidas = puntos_obtenido_B
     puntos_obtenido_B = 0
     diccionario = {1: 50, 2: 40, 3: 30, 4: 20, 5: 10}
     while cantidad_de_partidas_1 < cantidad_de_partidas:
@@ -334,7 +336,7 @@ def puntos_jugadores(intentos_A, intentos_B, Jugador_arranca, ganador, cantidad_
                 total_de_puntos = ""
                 total_de_puntos += f"Ganaste!  usuario A obtuviste un total de {puntos_obtenidos_A} "
                 total_de_puntos += "\n"
-                total_de_puntos += f"Perdiste  usuario B obtuviste un total de {puntos_obtenido_B}"
+                total_de_puntos += f"Perdiste  usuario B obtuviste un totla de {puntos_obtenido_B}"
             elif intentos_A > 1 and intentos_B >= 1:
                 for i in range(1, 6):
                     if intentos_A == i and intentos_B == i - 1:
