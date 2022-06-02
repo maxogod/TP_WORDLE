@@ -272,6 +272,8 @@ def logica_juego(lista_info_jugadores):
 def jugadores_usernames():
     user1 = input('ingrese nombre de usuario: ')
     user2 = input('ingrese nombre de usuario del otro jugador: ')
+    while user1 == user2:
+        user2 = input('Debe ser diferente al anterion jugador: ')
     jugadores = [user1, user2]
     indice = random.randrange(len(jugadores))
     p1 = jugadores[indice]
