@@ -245,7 +245,7 @@ def sin_acentos(arriesgo):
 
     return palabra_1.upper()
 
-def puntos_jugadores(Jugador_arranca, ganador, dict_jugadores):
+def puntos_jugadores(Jugador_arranca, ganador, dict_jugadores, intentos):
     '''
     Define cuantos puntos se le asigna a cada jugador por partida.
     Recibe el jugador que empieza la partida, quien fue el ganador ('' si no hubo), y el diccionario de jugadores.
@@ -267,14 +267,13 @@ def puntos_jugadores(Jugador_arranca, ganador, dict_jugadores):
                 puntos_partida.append((jugador, (-puntos_obtenidos_B)))
     else:
         for jugador in dict_jugadores:
-            cantidad_intentos = len(dict_jugadores[jugador]['intentos']) if (len(dict_jugadores[jugador]['intentos']) != 0) else 1
 
             if(jugador == ganador):
-                dict_jugadores[jugador]['puntos'] += diccionario[cantidad_intentos]
-                puntos_partida.append((jugador, diccionario[cantidad_intentos]))
+                dict_jugadores[jugador]['puntos'] += diccionario[intentos]
+                puntos_partida.append((jugador, diccionario[intentos]))
             else:
-                dict_jugadores[jugador]['puntos'] -= diccionario[cantidad_intentos]
-                puntos_partida.append((jugador, (-diccionario[cantidad_intentos])))
+                dict_jugadores[jugador]['puntos'] -= diccionario[intentos]
+                puntos_partida.append((jugador, (-diccionario[intentos])))
 
     return puntos_partida
 
@@ -346,7 +345,7 @@ def logica_juego(dict_jugadores):
     delta_time = time_end - time_start
     mins = int(delta_time.total_seconds() / 60)
     secs = int(delta_time.total_seconds() - (60 * mins))
-    puntos_partida = puntos_jugadores(lista_jugador[0], ganador, dict_jugadores)
+    puntos_partida = puntos_jugadores(lista_jugador[0], ganador, dict_jugadores, intentos)
 
     print(f'La palabra ha sido adivinada en {mins} minutos y {secs} segundos :)') \
         if estado_partida else print("La palabra no fue adivinada :(")
