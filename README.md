@@ -14,3 +14,6 @@ Wordle on python.
 loss = -100p (p1) & -50p (p2) .
 
 #zip includes 2 .py files.
+
+
+(spanish)
