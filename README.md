@@ -11,6 +11,6 @@ Wordle on python.
 3 = 30p, 
 4 = 20p, 
 5 = 10p, 
-loss = -100(p1) & -50(p2) .
+loss = -100p (p1) & -50p (p2) .
 
 #zip includes 2 .py files.
