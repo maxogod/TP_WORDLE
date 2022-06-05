@@ -13,6 +13,7 @@ def crear_dict_info_jugadores(lista_jugadores):
     Crea un diccionario cuyas claves son los nombres de los jugadores y los valores la información de cada uno.
     Cada clave jugador posee un diccionario con los puntos, posicion y los intentos que le toca jugar por partida.
     Retorna el diccionario.
+    #Florencia Russo
     """
     dict_info_jugadores = {}
     for cantidad in range(len(lista_jugadores)):
@@ -25,6 +26,7 @@ def crear_dict_info_jugadores(lista_jugadores):
 def cambiar_posicion_jugadores(dict_info_jugadores):
     """
     Recibe un diccionario con informacion de los jugadores. Cambia las posiciones.
+    #Florencia Russo
     """
     lista_posicion_jugadores = []
     posiciones_disponibles = []
@@ -47,6 +49,7 @@ def dividir_turnos_jugadores(dict_jugadores, cantidad_turnos):
     Recibe el diccionario de jugadores y la cantidad de turnos.
     Asigna el turno de cada jugador segun su posicion y los guarda en una lista.
     Retorna una lista con el nombre del jugador en la posición segun el turno que le toca jugar.
+    #Florencia Russo
     """
     jugadores = sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['posicion'])
     jugadores = [jugador[0] for jugador in jugadores]
@@ -63,6 +66,7 @@ def ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo, palabra_oculta):
     """
     Oculta las letras de la palabra que no estan en el arriesgo o no estan
     bien posicionadas y pone '? '
+    #Florencia Russo
     """
     letras = ""
     lista_arriesgo = arriesgo.split(' ')
@@ -82,6 +86,7 @@ def crear_tablero():
     """
     Crea un tablero de todos '?' y es usado solo una vez
     al empezar el juego.
+    #Ivan Teuber
     """
     tablero = []
     for i in range(CANTIDAD_LETRAS):
@@ -95,6 +100,7 @@ def actualizar_tablero(tablero, intentos, arriesgo):
     Actualiza el tablero segun el intento y el arriesgo recibido.
     Actualiza el tablero anterior, en el primer intento actualiza el original (crear_tablero)
     y en el ultimo intento actualiza el anteriormente actualizado.
+    #Florencia Russo
     """
     tablero[intentos] = arriesgo
 
@@ -111,6 +117,7 @@ def imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=False):
         ? ? ? ? ?
         ? ? ? ? ?
         Arriesgo:
+        #Ivan Teuber
     """
     print(f"Palabra a adivinar: {palabra_oculta}" if not fin
           else f"Palabra a adivinar: {palabra_adivinar}")
@@ -130,6 +137,7 @@ def selecciona_palabra():
     """
     Selecciona de forma aleatoria una palabra de la lista devuelta por obtener_palabras_validas().
     Retorna la palabra seleccionada.
+    #Facundo Talellis - Maximo Utrera - Florencia Russo
     """
     lista = obtener_palabras_validas()
     return lista[random.randint(0, len(lista))].upper()
@@ -139,6 +147,7 @@ def definir_victoria(arriesgo):
     """
     Recibe una palabra ya pintada (retorno de validar_aciertos) y valida si está toda en verde.
     Retorna True si la palabra esta en verde o False si alguna letra tiene otro color.
+    #Facundo Talellis
     """
     cont = 0
     arriesgo = arriesgo.split(' ')
@@ -158,6 +167,7 @@ def contar_letras(palabra_adivinar):
     Funcion auxiliar de (validar_aciertos), devuelve un diccionario
     con las letras de la palabra como claves y con valores = cantidad de veces
     que esa letra esta en la palabra.
+    #Florencia Russo
     """
     diccionario = {}
     for letra in palabra_adivinar:
@@ -177,6 +187,7 @@ def validar_aciertos(palabra_adivinar, arriesgo):
     si aparece en la palabra a adivinar pero en otra posicion (amarillo)
     o si no esta en la palabra (gris oscuro).
     Cada letra esta separada por espacios para mejor lectura.
+    #Florencia Russo
     """
     cantidad_letras = contar_letras(palabra_adivinar)
     palabra_pintada = ''
@@ -209,6 +220,7 @@ def validar_palabra(arriesgo):
     alpha, en caso contrario pide input hasta tener una palabra valida,
     luego de obtenerla le pasa la palabra a la funcion sacar_acentos y retorna
     lo que esta le de.
+    #Maximo Utrera
     """
     while len(arriesgo) != CANTIDAD_LETRAS or not arriesgo.isalpha():
         if len(arriesgo) != CANTIDAD_LETRAS:
@@ -224,6 +236,7 @@ def validar_palabra(arriesgo):
 def sin_acentos(arriesgo):
     """
     Recibe una palabra. Reemplaza las vocales con acentos. Retorna la misma palabra sin acentos.
+    #Ruth Gomez
     """
     vocales = 'áéíóú'
     vocales_1 = 'aeiou'
@@ -250,6 +263,7 @@ def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     Recibe el jugador que empieza la partida, quien fue el ganador ('' si no hubo), y el diccionario de jugadores.
     Acumula los puntos de la partida en la propiedad puntos del diccionario de cada jugador.
     Retorna una lista de tuplas. Cada tupla tiene al nombre del jugador en la primera posicion y los puntos de la partida en la segunda posicion.
+    #Ruth Gomez - Facundo Talellis
     """
     diccionario={1:50,2:40,3:30,4:20,5:10}
     puntos_obtenidos_A = 100
@@ -281,6 +295,7 @@ def seleccionar_ganador(dict_jugadores):
     Elige al ganador del juego.
     Recibe el diccionario de jugadores. Lo ordena de mayor a menor por puntos.
     Retorna una tupla con el nombre y los datos del ganador.
+    #Florencia Russo
     """
     return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse = True))[0]
 
@@ -289,6 +304,7 @@ def imprimir_puntos_partida(puntos_partida, dict_jugadores):
     """
     Recibe los puntos de la partida y el diccionario de jugadores.
     Imprime los puntos de la partida y los acumulados por cada jugador
+    #Ruth Gomez - Facundo Talellis
     """
     for jugador in puntos_partida:
         nombre = jugador[0].upper()
@@ -306,6 +322,7 @@ def logica_juego(dict_jugadores):
     """
     Recibe el diccionario de jugadorescomo parametro.
     Contiene la logica perteneciente a una partida de fiuble.
+    #Florencia Russo - Ruth Gomez - Facundo Talellis - Ivan Teuber - Maximo Utrera
     """
     intentos = 0
     time_start = datetime.now()
@@ -347,6 +364,7 @@ def jugadores_usernames():
     """
     Pide el ingreso del nombre de los jugadores. Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
     Retorna una lista con los jugadores.
+    #Ivan Teuber - Maximo Utrera
     """
     user1 = input('Ingrese nombre de usuario: ')
     user2 = input('Ingrese nombre de usuario del otro jugador: ')
@@ -366,6 +384,7 @@ def jugadores_usernames():
 def rejugabilidad():
     """
     Funcion principal que ejecuta el juego. Permite jugar multiples partidas(logica_juego)
+    #Maximo Utrera
     """
     print('\n~ WELCOME TO WORDLE ~')
 
