@@ -8,50 +8,49 @@ CANTIDAD_LETRAS = 5
 CANTIDAD_INTENTOS = 5
 
 
-def crear_lista_info_jugadores(lista_jugadores):
+def crear_dict_info_jugadores(lista_jugadores):
     """
-    Crea una lista de diccionarios con la información de todos los jugadores.
-    Cada diccionario posee el nombre, puntos y posicion del jugador correspondiente.
-    Retorna la lista.
+    Crea un diccionario cuyas claves son los nombres de los jugadores y los valores la información de cada uno.
+    Cada clave jugador posee un diccionario con los puntos, posicion y los intentos que le toca jugar por partida.
+    Retorna el diccionario.
     """
-    lista_info_jugadores = []
+    dict_info_jugadores = {}
     for cantidad in range(len(lista_jugadores)):
-        lista_info_jugadores.append({"nombre": lista_jugadores[cantidad],
-                                     "puntos": 0,
-                                     "posicion": cantidad + 1})
+        dict_info_jugadores[lista_jugadores[cantidad]] = {"puntos": 0,
+                                     "posicion": cantidad + 1,
+                                     "intentos": []}
 
-    return lista_info_jugadores
+    return dict_info_jugadores
 
 
-def cambiar_posicion_jugadores(lista_info_jugadores):
+def cambiar_posicion_jugadores(dict_info_jugadores):
     """
-    Recibe una lista de diccionarios con la informacion de los jugadores. Cambia las posiciones.
+    Recibe un diccionario con informacion de los jugadores. Cambia las posiciones.
     """
     lista_posicion_jugadores = []
     posiciones_disponibles = []
 
-    for jugador in lista_info_jugadores:
-        lista_posicion_jugadores += [(jugador['nombre'], jugador['posicion'])]
-        posiciones_disponibles.append(jugador['posicion'])
+    for jugador in dict_info_jugadores:
+        lista_posicion_jugadores += [(jugador, dict_info_jugadores[jugador]['posicion'])]
+        posiciones_disponibles.append(dict_info_jugadores[jugador]['posicion'])
 
-    for jugador in lista_info_jugadores:
+    for jugador in dict_info_jugadores:
         posiciones_sin_jugador = posiciones_disponibles.copy()
-        posiciones_sin_jugador.remove(jugador['posicion']) \
-            if (jugador['posicion'] in posiciones_disponibles) else None
+        if (dict_info_jugadores[jugador]['posicion'] in posiciones_disponibles):
+            posiciones_sin_jugador.remove(dict_info_jugadores[jugador]['posicion'])
         nueva_posicion = random.choice(posiciones_sin_jugador)
-        jugador['posicion'] = nueva_posicion
+        dict_info_jugadores[jugador]['posicion'] = nueva_posicion
         posiciones_disponibles.remove(nueva_posicion)
 
 
-def dividir_turnos_jugadores(lista_jugadores, cantidad_turnos):
+def dividir_turnos_jugadores(dict_jugadores, cantidad_turnos):
     """
-    Recibe la lista de diccionarios de jugadores y la cantidad de turnos.
-    Ordena los jugadores por la posición y crea una lista con los nombres de cada jugador.
-    Retorna una lista con el nombre del jugador correspondiente al indice de la lista.
-    Turno 1 le toca al jugador de la posicion1 de la lista.
+    Recibe el diccionario de jugadores y la cantidad de turnos.
+    Asigna el turno de cada jugador segun su posicion y los guarda en una lista.
+    Retorna una lista con el nombre del jugador en la posición segun el turno que le toca jugar.
     """
-    jugadores = sorted(lista_jugadores, key=lambda jugador: jugador['posicion'])
-    jugadores = [jugador['nombre'] for jugador in jugadores]
+    jugadores = sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['posicion'])
+    jugadores = [jugador[0] for jugador in jugadores]
     le_toca = []
     toggle = itertools.cycle(jugadores)
 
@@ -98,15 +97,24 @@ def actualizar_tablero(tablero, intentos, arriesgo):
     Actualiza el tablero anterior, en el primer intento actualiza el original (crear_tablero)
     y en el ultimo intento actualiza el anteriormente actualizado.
     """
-
     tablero[intentos] = arriesgo
 
     return tablero
 
 
 def imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=False):
+    '''
+    Imprime el tablero con el formato
+        Palabra a adivinar:
+        ? ? ? ? ?
+        ? ? ? ? ?
+        ? ? ? ? ?
+        ? ? ? ? ?
+        ? ? ? ? ?
+        Arriesgo:
+    '''
     print(f"Palabra a adivinar: {palabra_oculta}" if not fin
-          else f"palabra a adivinar: {palabra_adivinar}")
+          else f"Palabra a adivinar: {palabra_adivinar}")
 
     for celda in tablero:
         print(celda)
@@ -120,11 +128,19 @@ def imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=False):
 
 
 def selecciona_palabra():
+    '''
+    Selecciona de forma aleatoria una palabra de la lista devuelta por obtener_palabras_validas(). 
+    Retorna la palabra seleccionada.
+    '''
     lista = obtener_palabras_validas()
     return lista[random.randint(0, len(lista))].upper()
 
 
 def definir_victoria(arriesgo):
+    '''
+    Recibe una palabra ya pintada (retorno de validar_aciertos) y valida si está toda en verde.
+    Retorna True si la palabra esta en verde o False si alguna letra tiene otro color.
+    '''
     cont = 0
     arriesgo = arriesgo.split(' ')
     estado_partida = False
@@ -140,7 +156,7 @@ def definir_victoria(arriesgo):
 
 def contar_letras(palabra_adivinar):
     """
-    Funcion ayudante de (validar_aciertos), devuelve un diccionario
+    Funcion auxiliar de (validar_aciertos), devuelve un diccionario
     con las letras de la palabra como claves y con valores = cantidad de veces
     que esa letra esta en la palabra.
     """
@@ -195,7 +211,6 @@ def validar_palabra(arriesgo):
     luego de obtenerla le pasa la palabra a la funcion sacar_acentos y retorna
     lo que esta le de.
     """
-
     while len(arriesgo) != CANTIDAD_LETRAS or not arriesgo.isalpha():
         if len(arriesgo) != CANTIDAD_LETRAS:
             print('Error, el arriezgo debe tener la misma cantidad '
@@ -208,11 +223,9 @@ def validar_palabra(arriesgo):
 
 
 def sin_acentos(arriesgo):
-    # Me parece mejor esta versión que la otra con dos for.
-    # Voy a inverstigar lo que nos comentó el profe de la resta de codigos ASCII,
-    # pero para la primera entrega me parece que esta quedaría mejor.
-    # La propongo para la segunda parte lo del ASCII.
-
+    '''
+    Recibe una palabra. Reemplaza las vocales con acentos. Retorna la misma palabra sin acentos.
+    '''
     vocales = 'áéíóú'
     vocales_1 = 'aeiou'
     palabra_1 = arriesgo.lower()
@@ -232,23 +245,86 @@ def sin_acentos(arriesgo):
 
     return palabra_1.upper()
 
+def puntos_jugadores(Jugador_arranca, ganador, dict_jugadores):
+    '''
+    Define cuantos puntos se le asigna a cada jugador por partida. 
+    Recibe el jugador que empieza la partida, quien fue el ganador ('' si no hubo), y el diccionario de jugadores.
+    Acumula los puntos de la partida en la propiedad puntos del diccionario de cada jugador. 
+    Retorna una lista de tuplas. Cada tupla tiene al nombre del jugador en la primera posicion y los puntos de la partida en la segunda posicion. 
+    '''
+    diccionario={1:50,2:40,3:30,4:20,5:10}
+    puntos_obtenidos_A = 100
+    puntos_obtenidos_B = 50 
+    puntos_partida = []
 
-def logica_juego(lista_info_jugadores):
-    """
-    main loop del juego, esta funcion empieza cuando comienza el juego
-    y termina cuando termina el juego.
-    """
+    if(ganador == '') : #no gano nadie
+        for jugador in dict_jugadores:
+            if(jugador == Jugador_arranca):
+                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_A
+                puntos_partida.append((jugador, (-puntos_obtenidos_A)))
+            else:
+                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_B
+                puntos_partida.append((jugador, (-puntos_obtenidos_B)))
+    else:
+        for jugador in dict_jugadores:
+            cantidad_intentos = len(dict_jugadores[jugador]['intentos']) if (len(dict_jugadores[jugador]['intentos']) != 0) else 1
 
+            if(jugador == ganador):
+                dict_jugadores[jugador]['puntos'] += diccionario[cantidad_intentos]
+                puntos_partida.append((jugador, diccionario[cantidad_intentos]))
+            else:
+                dict_jugadores[jugador]['puntos'] -= diccionario[cantidad_intentos]
+                puntos_partida.append((jugador, (-diccionario[cantidad_intentos])))
+    
+    return puntos_partida
+
+def seleccionar_ganador(dict_jugadores):
+    '''
+    Elige al ganador del juego. 
+    Recibe el diccionario de jugadores. Lo ordena de mayor a menor por puntos.
+    Retorna una tupla con el nombre y los datos del ganador.
+    '''
+    return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse = True))[0]
+
+def inicializar_intentos_partida(dict_jugadores):
+    '''
+    Inicializa la propierdad intentos de todos los jugadores en una lista vacia.
+    '''
+    for jugador in dict_jugadores:
+        dict_jugadores[jugador]['intentos'] = []
+
+def imprimir_puntos_partida(puntos_partida, dict_jugadores):
+    '''
+    Recibe los puntos de la partida y el diccionario de jugadores. 
+    Imprime los puntos de la partida y los acumulados por cada jugador
+    '''
+    for jugador in puntos_partida:
+        nombre = jugador[0].upper()
+        puntos_partida = jugador[1]
+        puntos_totales = dict_jugadores[jugador[0]]['puntos']
+        mensaje = "{} obtuviste un total de {} puntos, tenes acumulados {} puntos".format(nombre, puntos_partida, puntos_totales) 
+
+        print(mensaje)
+
+
+def logica_juego(dict_jugadores):
+    """
+    Recibe el diccionario de jugadorescomo parametro. 
+    Contiene la logica perteneciente a una partida de fiuble.
+    """
     intentos = 0
     time_start = datetime.now()
     palabra_adivinar = selecciona_palabra()
     palabra_oculta = "? " * CANTIDAD_LETRAS
     estado_partida = False
-    lista_jugador = dividir_turnos_jugadores(lista_info_jugadores, CANTIDAD_INTENTOS)
+    inicializar_intentos_partida(dict_jugadores)
+    lista_jugador = dividir_turnos_jugadores(dict_jugadores, CANTIDAD_INTENTOS)
+    ganador = ''
     tablero = crear_tablero()
 
     while intentos < CANTIDAD_INTENTOS and not estado_partida:
         print("\nJuega", lista_jugador[intentos].upper())
+        dict_jugadores[lista_jugador[intentos]]['intentos'].append(intentos+1) #Actualiza clave intentos del diccionario del jugador actual
         arriesgo = imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero)
         arriesgo = validar_palabra(arriesgo)
         arriesgo = validar_aciertos(palabra_adivinar, arriesgo)
@@ -259,21 +335,30 @@ def logica_juego(lista_info_jugadores):
             tablero = actualizar_tablero(tablero, intentos, arriesgo)
             imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=True)
             time_end = datetime.now()
+            if estado_partida:
+                ganador = lista_jugador[intentos] 
         intentos += 1
 
     delta_time = time_end - time_start
     mins = int(delta_time.total_seconds() / 60)
     secs = int(delta_time.total_seconds() - (60 * mins))
+    puntos_partida = puntos_jugadores(lista_jugador[0], ganador, dict_jugadores)
 
     print(f'Ganaste! Y te tomo {mins} minutos y {secs} segundos.') \
         if estado_partida else print("Perdiste!")
 
+    imprimir_puntos_partida(puntos_partida, dict_jugadores)
+
 
 def jugadores_usernames():
-    user1 = input('ingrese nombre de usuario: ')
-    user2 = input('ingrese nombre de usuario del otro jugador: ')
+    '''
+    Pide el ingreso del nombre de los jugadores. Valida que los nombres no esten repetidos y pide reingreso en caso necesario. 
+    Retorna una lista con los jugadores.
+    '''
+    user1 = input('Ingrese nombre de usuario: ')
+    user2 = input('Ingrese nombre de usuario del otro jugador: ')
     while user1 == user2:
-        user2 = input('Debe ser diferente al anterion jugador: ')
+        user2 = input('Debe ser diferente al anterior jugador: ')
     jugadores = [user1, user2]
     indice = random.randrange(len(jugadores))
     p1 = jugadores[indice]
@@ -286,81 +371,26 @@ def jugadores_usernames():
 
 
 def rejugabilidad():
+    '''
+    Funcion principal que ejecuta el juego. Permite jugar multiples partidas(logica_juego)
+    '''
     print('\n~ WELCOME TO WORDLE ~')
 
     jugadores = jugadores_usernames()
-    lista_info_jugadores = crear_lista_info_jugadores(
-        jugadores)
-    # lista de diccionarios.
-    # Cada diccionario es un jugador y tiene el nombre, los puntos y la posicion.
-
+    dict_info_jugadores = crear_dict_info_jugadores(jugadores)
     jugar_denuevo = True
 
     while jugar_denuevo:
-        logica_juego(lista_info_jugadores)
-        desea_seguir = (input('Jugar denuevo (S/N): ')).upper()
+        logica_juego(dict_info_jugadores)
+        desea_seguir = (input('Jugar de nuevo (S/N): ')).upper()
         while desea_seguir not in 'SN':
             desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
+        cambiar_posicion_jugadores(dict_info_jugadores)
         if desea_seguir == 'N':
             jugar_denuevo = False
             print('Gracias por jugar!')
-        cambiar_posicion_jugadores(lista_info_jugadores)
+    ganador = seleccionar_ganador(dict_info_jugadores)
+    print(f"El ganador es {ganador[0].upper()} con un total de {ganador[1]['puntos']} puntos")
 
-
-def puntos_jugadores(intentos_A, intentos_B, Jugador_arranca, ganador, cantidad_de_partidas):
-    puntos_obtenidos_A = 0
-    cantidad_de_partidas_1 = 0
-    #    acumulador_A_por_patidas = puntos_obtenidos_A
-    #    acumulador_B_por_partidas = puntos_obtenido_B
-    puntos_obtenido_B = 0
-    diccionario = {1: 50, 2: 40, 3: 30, 4: 20, 5: 10}
-    while cantidad_de_partidas_1 < cantidad_de_partidas:
-        if (ganador == 0):  # no gano nadie
-            if (Jugador_arranca == 1):
-                puntos_obtenidos_A -= 100
-                puntos_obtenido_B -= 50
-            total_de_puntos = ""
-            total_de_puntos += f"Perdiste usuario A obtuviste un total {puntos_obtenidos_A}"
-            total_de_puntos += "\n"
-            total_de_puntos += f"Perdiste usuario B obtuviste un total {puntos_obtenido_B}"
-
-            if (Jugador_arranca == 2):
-                puntos_obtenidos_A -= 50
-                puntos_obtenido_B -= 100
-            total_de_puntos = ""
-            total_de_puntos += f"Perdiste usuario A obtuviste un total {puntos_obtenidos_A}"
-            total_de_puntos += "\n"
-            total_de_puntos += f"Perdiste usuario B obtuviste un total {puntos_obtenido_B}"
-        elif (ganador == 1):  # gana el usuario A
-            if intentos_A == 1 and intentos_B == 0:
-                puntos_obtenidos_A += diccionario[1]
-                puntos_obtenido_B -= diccionario[1]
-                total_de_puntos = ""
-                total_de_puntos += f"Ganaste!  usuario A obtuviste un total de {puntos_obtenidos_A} "
-                total_de_puntos += "\n"
-                total_de_puntos += f"Perdiste  usuario B obtuviste un totla de {puntos_obtenido_B}"
-            elif intentos_A > 1 and intentos_B >= 1:
-                for i in range(1, 6):
-                    if intentos_A == i and intentos_B == i - 1:
-                        puntos_obtenidos_A += diccionario[i + 1]
-                        puntos_obtenido_B -= diccionario[i + 1]
-                total_de_puntos = ""
-                total_de_puntos += f"Ganaste!  usuario A obtuviste un total de {puntos_obtenidos_A} "
-                total_de_puntos += "\n"
-                total_de_puntos += f"Perdiste  usuario B obtuviste un totla de {puntos_obtenido_B}"
-
-        elif (ganador == 2):  # gana el usuario B
-
-            for i in range(1, 6):
-                if intentos_B == i and intentos_A == i - 1:
-                    puntos_obtenidos_A += diccionario[i]
-                    puntos_obtenido_B -= diccionario[i]
-            total_de_puntos = ""
-            total_de_puntos += f"Ganaste!  usuario B obtuviste un total de {puntos_obtenidos_A} "
-            total_de_puntos += "\n"
-            total_de_puntos += f"Perdiste  usuario A obtuviste un totla de {puntos_obtenido_B}"
-        cantidad_de_partidas_1 += 1
-
-    return total_de_puntos
 
 rejugabilidad()
