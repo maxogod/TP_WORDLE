@@ -17,8 +17,7 @@ def crear_dict_info_jugadores(lista_jugadores):
     dict_info_jugadores = {}
     for cantidad in range(len(lista_jugadores)):
         dict_info_jugadores[lista_jugadores[cantidad]] = {"puntos": 0,
-                                     "posicion": cantidad + 1,
-                                     "intentos": []}
+                                     "posicion": cantidad + 1}
 
     return dict_info_jugadores
 
@@ -316,10 +315,9 @@ def logica_juego(dict_jugadores):
     lista_jugador = dividir_turnos_jugadores(dict_jugadores, CANTIDAD_INTENTOS)
     ganador = ''
     tablero = crear_tablero()
-
+    print(palabra_adivinar)
     while intentos < CANTIDAD_INTENTOS and not estado_partida:
         print("\nJuega", lista_jugador[intentos].upper())
-        dict_jugadores[lista_jugador[intentos]]['intentos'].append(intentos+1) #Actualiza clave intentos del diccionario del jugador actual
         arriesgo = imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero)
         arriesgo = validar_palabra(arriesgo)
         arriesgo = validar_aciertos(palabra_adivinar, arriesgo)
