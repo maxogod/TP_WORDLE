@@ -10,8 +10,10 @@ CANTIDAD_INTENTOS = 5
 
 def crear_dict_info_jugadores(lista_jugadores):
     """
-    Crea un diccionario cuyas claves son los nombres de los jugadores y los valores la información de cada uno.
-    Cada clave jugador posee un diccionario con los puntos, posicion y los intentos que le toca jugar por partida.
+    Crea un diccionario cuyas claves son los nombres de los jugadores y los valores la
+    información de cada uno.
+    Cada clave jugador posee un diccionario con los puntos, posicion y los intentos que
+    le toca jugar por partida.
     Retorna el diccionario.
     #Florencia Russo
     """
@@ -260,9 +262,12 @@ def sin_acentos(arriesgo):
 def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     """
     Define cuantos puntos se le asigna a cada jugador por partida.
-    Recibe el jugador que empieza la partida, quien fue el ganador ('' si no hubo), y el diccionario de jugadores.
+    Recibe el jugador que empieza la partida, quien fue el ganador ('' si no hubo),
+     y el diccionario de jugadores.
     Acumula los puntos de la partida en la propiedad puntos del diccionario de cada jugador.
-    Retorna una lista de tuplas. Cada tupla tiene al nombre del jugador en la primera posicion y los puntos de la partida en la segunda posicion.
+    Retorna una lista de tuplas.
+    Cada tupla tiene al nombre del jugador en la primera posicion y los puntos de la partida
+     en la segunda posicion.
     #Ruth Gomez - Facundo Talellis
     """
     diccionario={1:50,2:40,3:30,4:20,5:10}
@@ -362,7 +367,8 @@ def logica_juego(dict_jugadores):
 
 def jugadores_usernames():
     """
-    Pide el ingreso del nombre de los jugadores. Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
+    Pide el ingreso del nombre de los jugadores.
+    Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
     Retorna una lista con los jugadores.
     #Ivan Teuber - Maximo Utrera
     """
