@@ -337,7 +337,6 @@ def logica_juego(dict_jugadores):
     lista_jugador = dividir_turnos_jugadores(dict_jugadores, CANTIDAD_INTENTOS)
     ganador = ''
     tablero = crear_tablero()
-    print(palabra_adivinar)
     while intentos < CANTIDAD_INTENTOS and not estado_partida:
         print("\nJuega", lista_jugador[intentos].upper())
         arriesgo = imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero)
