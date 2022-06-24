@@ -271,18 +271,18 @@ def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     #Ruth Gomez - Facundo Talellis
     """
     diccionario={1:50,2:40,3:30,4:20,5:10}
-    puntos_obtenidos_A = 100
-    puntos_obtenidos_B = 50
+    puntos_obtenidos_a = 100
+    puntos_obtenidos_b = 50
     puntos_partida = []
 
     if ganador == '' : #no gano nadie
         for jugador in dict_jugadores:
             if jugador == jugador_arranca:
-                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_A
-                puntos_partida.append((jugador, (-puntos_obtenidos_A)))
+                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_a
+                puntos_partida.append((jugador, (-puntos_obtenidos_a)))
             else:
-                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_B
-                puntos_partida.append((jugador, (-puntos_obtenidos_B)))
+                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_b
+                puntos_partida.append((jugador, (-puntos_obtenidos_b)))
     else:
         for jugador in dict_jugadores:
 
@@ -331,6 +331,7 @@ def logica_juego(dict_jugadores):
     """
     intentos = 0
     time_start = datetime.now()
+    time_end = None
     palabra_adivinar = selecciona_palabra()
     palabra_oculta = "? " * CANTIDAD_LETRAS
     estado_partida = False
