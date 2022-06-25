@@ -194,14 +194,14 @@ def validar_aciertos(palabra_adivinar, arriesgo):
     cantidad_letras = contar_letras(palabra_adivinar)
     palabra_pintada = ''
 
-    for indice in range(len(arriesgo)):
+    for indice in range(CANTIDAD_LETRAS):
         if arriesgo[indice] == palabra_adivinar[indice]:
             palabra_pintada += obtener_color("Verde") + arriesgo[indice] + " "
 
         else:
             palabra_pintada += obtener_color("GrisOscuro") + arriesgo[indice] + " "
 
-    for indice in range(len(arriesgo)):
+    for indice in range(CANTIDAD_LETRAS):
         if (arriesgo[indice] in palabra_adivinar and
                 arriesgo[indice] != palabra_adivinar[indice] and
                 ((palabra_pintada.count(obtener_color("Amarillo") + arriesgo[indice]) +
