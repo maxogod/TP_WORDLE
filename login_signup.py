@@ -18,10 +18,7 @@ def usuarios(users_file):
 
 
 def validacion(username, password, dic_users):
-    if username in dic_users and dic_users[username] == password:
-        return True
-    else:
-        return False
+    return username in dic_users and dic_users[username] == password
 
 
 def emergentwindow(username, password, dic_users):
