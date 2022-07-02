@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 def read_file(filename):
     #Puede ser reemplazada por otra funcion que haga lo mismo,
@@ -31,11 +32,11 @@ def emergentwindow(username, password, dic_users):
 
 
 def successwindow():
-    pass
+    messagebox.showinfo('Logueado correctamente')
 
 
 def errorwindow():
-    pass
+    messagebox.showerror('Error, No pudo loguearse, o no esta registrado')
 
 
 def gui(dic_users):
