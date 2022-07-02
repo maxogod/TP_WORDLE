@@ -38,7 +38,7 @@ def obtener_palabras_de_archivo(diccionario_palabras, nombre_archivo, indice_arc
     Funcion que lee el archivo y agrega palabras al diccionario. Recibe el diccionario de palabras, el nombre del archivo y un indice de archivo. Por cada palabra de cada linea, llama a la funcion agregar_palabra_candidata_a_diccionario.
     Florencia Russo
     '''
-    with open(nombre_archivo, 'r') as archivo:
+    with open(nombre_archivo, 'r', encoding = "utf8") as archivo:
         for linea in archivo:
             lista_palabras = linea.rstrip("\n").split(' ')
 
@@ -53,7 +53,7 @@ def crear_archivo_csv(diccionario_palabras, cantidad_archivos):
     No tiene retorno.
     Florencia Russo
     '''
-    archivo_csv = open('palabras.csv', 'w')
+    archivo_csv = open('palabras.csv', 'w', encoding = 'utf8')
     dict_ordenado = sorted(diccionario_palabras.items(), key = lambda dict: dict[0])
     for clave in dict_ordenado:
         lista_cantidades = ''
@@ -79,7 +79,7 @@ def obtener_diccionario_palabras_candidatas(lista_archivos):
 
 # diccionario_palabras = {}
 # lista_archivos = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
-lista_archivos = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
+lista_archivos = ["archivos/Cuentos8.txt", "archivos/La araña negra - tomo 18.txt", "archivos/Las 1000 Noches y 1 Noche8.txt"]
 diccionario_palabras = obtener_diccionario_palabras_candidatas(lista_archivos)
 print(diccionario_palabras)
 crear_archivo_csv(diccionario_palabras, len(lista_archivos))
