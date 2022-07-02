@@ -8,21 +8,17 @@ def read_file(filename):
     return line.rstrip('\n').split(',') if line else ['', '']
 
 
-def usuarios(users_file):
-    dic_usuarios = {}
-    user, password = read_file(users_file)
-    while user:
-        dic_usuarios[user] = password
-        user, password = read_file(users_file)
-    return dic_usuarios
+def validacion(username, password, users_file):
+
+    username_leido, password_leido = read_file(users_file)
+    while username_leido and username != username_leido:
+        username_leido, password_leido = read_file(users_file)
+
+    return username == username_leido and password == password_leido
 
 
-def validacion(username, password, dic_users):
-    return username in dic_users and dic_users[username] == password
-
-
-def emergentwindow(username, password, dic_users):
-    if validacion(username, password, dic_users):
+def emergentwindow(username, password, users_file):
+    if validacion(username, password, users_file):
         successwindow()
     else:
         errorwindow()
@@ -36,7 +32,7 @@ def errorwindow():
     messagebox.showerror('Error', 'Error, No pudo loguearse, o no esta registrado')
 
 
-def gui(dic_users):
+def gui(users_file):
     #Root of GUI
     root = Tk()
     root.iconbitmap(r'C:\Users\TAI DING\Desktop\Utilities\ICONS\pokemon.ico')
@@ -78,7 +74,7 @@ def gui(dic_users):
     #Button
     ButtonEnter = Button(root, text='Enter',
                          command= lambda:
-                         emergentwindow(UsernameEntry.get(), PasswordEntry.get(), dic_users))
+                         emergentwindow(UsernameEntry.get(), PasswordEntry.get(), users_file))
     ButtonEnter.pack()
 
 
@@ -87,7 +83,6 @@ def gui(dic_users):
 
 def main_login():
     with open("usuarios.csv") as users_file:
-        dic_users = usuarios(users_file)
-    gui(dic_users)
+        gui(users_file)
 
 main_login()
