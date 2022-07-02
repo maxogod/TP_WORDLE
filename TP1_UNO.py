@@ -1,6 +1,7 @@
 from utiles import obtener_color, obtener_palabras_validas
 import random
 import itertools
+import unicodedata
 from datetime import datetime
 
 # Variables globales
@@ -20,7 +21,7 @@ def crear_dict_info_jugadores(lista_jugadores):
     dict_info_jugadores = {}
     for cantidad in range(len(lista_jugadores)):
         dict_info_jugadores[lista_jugadores[cantidad]] = {"puntos": 0,
-                                     "posicion": cantidad + 1}
+                                                          "posicion": cantidad + 1}
 
     return dict_info_jugadores
 
@@ -240,24 +241,13 @@ def sin_acentos(arriesgo):
     Recibe una palabra. Reemplaza las vocales con acentos. Retorna la misma palabra sin acentos.
     #Ruth Gomez
     """
-    vocales = 'áéíóú'
-    vocales_1 = 'aeiou'
-    palabra_1 = arriesgo.lower()
-    for letra in palabra_1:
-        if letra == vocales[0]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[0])
-        elif letra == vocales[1]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[1])
-        elif letra == vocales[2]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[2])
-        elif letra == vocales[3]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[3])
-        elif letra == vocales[4]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[4])
-        else:
-            pass
 
-    return palabra_1.upper()
+    arrieesgo_sin_acento = ''
+    for c in unicodedata.normalize('NFKD', arriesgo):
+        if unicodedata.category(c) != 'Mn':
+            arrieesgo_sin_acento += c
+    return arrieesgo_sin_acento.upper()
+
 
 def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     """
@@ -270,12 +260,12 @@ def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
      en la segunda posicion.
     #Ruth Gomez - Facundo Talellis
     """
-    diccionario={1:50,2:40,3:30,4:20,5:10}
+    diccionario = {1: 50, 2: 40, 3: 30, 4: 20, 5: 10}
     puntos_obtenidos_a = 100
     puntos_obtenidos_b = 50
     puntos_partida = []
 
-    if ganador == '' : #no gano nadie
+    if ganador == '':  # no gano nadie
         for jugador in dict_jugadores:
             if jugador == jugador_arranca:
                 dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_a
@@ -295,6 +285,7 @@ def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
 
     return puntos_partida
 
+
 def seleccionar_ganador(dict_jugadores):
     """
     Elige al ganador del juego.
@@ -302,7 +293,7 @@ def seleccionar_ganador(dict_jugadores):
     Retorna una tupla con el nombre y los datos del ganador.
     #Florencia Russo
     """
-    return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse = True))[0]
+    return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse=True))[0]
 
 
 def imprimir_puntos_partida(puntos_partida, dict_jugadores):
