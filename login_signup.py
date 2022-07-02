@@ -32,11 +32,11 @@ def emergentwindow(username, password, dic_users):
 
 
 def successwindow():
-    messagebox.showinfo('Logueado correctamente')
+    messagebox.showinfo('Success', 'Logueado correctamente')
 
 
 def errorwindow():
-    messagebox.showerror('Error, No pudo loguearse, o no esta registrado')
+    messagebox.showerror('Error', 'Error, No pudo loguearse, o no esta registrado')
 
 
 def gui(dic_users):
