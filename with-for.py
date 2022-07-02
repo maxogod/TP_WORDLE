@@ -79,7 +79,7 @@ def obtener_diccionario_palabras_candidatas(lista_archivos):
 
 # diccionario_palabras = {}
 # lista_archivos = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
-lista_archivos = ["archivos/Cuentos8.txt", "archivos/La araña negra - tomo 18.txt", "archivos/Las 1000 Noches y 1 Noche8.txt"]
+lista_archivos = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
 diccionario_palabras = obtener_diccionario_palabras_candidatas(lista_archivos)
 print(diccionario_palabras)
 crear_archivo_csv(diccionario_palabras, len(lista_archivos))
