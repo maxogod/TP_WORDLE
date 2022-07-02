@@ -51,9 +51,10 @@ def config_main():
     config_default = {'LONGITUD_PALABRA_SECRETA': [5, 'por default.'],
                   'MAXIMO_PARTIDAS': [5, 'por default.'],
                   'REINICIAR_ARCHIV0_PARTIDAS': [False, 'por default.']}
+    config_final = {}
     try:
         with open("config_file.csv") as config:
-            config_leida = config_dic_mod(config, config_default)
-            return config_leida
+            config_final = config_dic_mod(config, config_default)
     except FileNotFoundError:
-        return config_default
+        config_final = config_default
+    return config_final
