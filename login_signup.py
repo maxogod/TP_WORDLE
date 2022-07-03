@@ -97,4 +97,3 @@ def main_login():
     gui()
     l_jugadores = [Jugadores.p1, Jugadores.p2]
     return l_jugadores
-print(main_login())
