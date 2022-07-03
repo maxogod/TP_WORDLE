@@ -1,6 +1,20 @@
 from tkinter import *
 from tkinter import messagebox
 
+class Jugadores:
+    p1 = ''
+    p2 = ''
+
+    def __init__(self, username):
+        if Jugadores.p1 == '':
+            Jugadores.p1 = username
+        elif Jugadores.p2 == '':
+            Jugadores.p2 = username
+
+    def username_jugador():
+        #No tiene parametro self a proposito
+        return [Jugadores.p1, Jugadores.p2]
+
 def read_file(filename):
     #Puede ser reemplazada por otra funcion que haga lo mismo,
     #pero cuidado con el return default ['', '']
@@ -8,17 +22,18 @@ def read_file(filename):
     return line.rstrip('\n').split(',') if line else ['', '']
 
 
-def validacion(username, password, users_file):
-
-    username_leido, password_leido = read_file(users_file)
-    while username_leido and username != username_leido:
+def validacion(username, password):
+    with open("usuarios.csv") as users_file:
         username_leido, password_leido = read_file(users_file)
+        while username_leido and username != username_leido:
+            username_leido, password_leido = read_file(users_file)
 
-    return username == username_leido and password == password_leido
+    return username == username_leido and password == password_leido and Jugadores.p1 != username
 
 
-def emergentwindow(username, password, users_file):
-    if validacion(username, password, users_file):
+def emergentwindow(username, password):
+    if validacion(username, password):
+        Jugadores(username)
         successwindow()
     else:
         errorwindow()
@@ -29,10 +44,11 @@ def successwindow():
 
 
 def errorwindow():
-    messagebox.showerror('Error', 'Error, No pudo loguearse, o no esta registrado')
+    messagebox.showerror('Error', 'Error, No pudo loguearse, o no esta registrado '
+                                  'o ya esta logueado')
 
 
-def gui(users_file):
+def gui():
     #Root of GUI
     root = Tk()
     root.iconbitmap(r'C:\Users\TAI DING\Desktop\Utilities\ICONS\pokemon.ico')
@@ -74,7 +90,7 @@ def gui(users_file):
     #Button
     ButtonEnter = Button(root, text='Enter',
                          command= lambda:
-                         emergentwindow(UsernameEntry.get(), PasswordEntry.get(), users_file))
+                         emergentwindow(UsernameEntry.get(), PasswordEntry.get()))
     ButtonEnter.pack()
 
 
@@ -82,7 +98,6 @@ def gui(users_file):
 
 
 def main_login():
-    with open("usuarios.csv") as users_file:
-        gui(users_file)
-
-main_login()
+    gui()
+    l_jugadores = Jugadores.username_jugador()
+    return l_jugadores
