@@ -11,10 +11,6 @@ class Jugadores:
         elif Jugadores.p2 == '':
             Jugadores.p2 = username
 
-    def username_jugador():
-        #No tiene parametro self a proposito
-        return [Jugadores.p1, Jugadores.p2]
-
 def read_file(filename):
     #Puede ser reemplazada por otra funcion que haga lo mismo,
     #pero cuidado con el return default ['', '']
@@ -99,5 +95,6 @@ def gui():
 
 def main_login():
     gui()
-    l_jugadores = Jugadores.username_jugador()
+    l_jugadores = [Jugadores.p1, Jugadores.p2]
     return l_jugadores
+print(main_login())
