@@ -1,11 +1,19 @@
-from utiles import obtener_color, obtener_palabras_validas
+from utiles import obtener_color
 import random
 import itertools
+import unicodedata
 from datetime import datetime
+from gameconfig import config_main
+from palabras_candidatas import obtener_diccionario_palabras_candidatas
+from login_signup import main_login
 
 # Variables globales
-CANTIDAD_LETRAS = 9
-CANTIDAD_INTENTOS = 5
+# CANTIDAD_LETRAS = 5
+# CANTIDAD_INTENTOS = 5
+CONFIGURACION_JUEGO = config_main()
+CANTIDAD_LETRAS = CONFIGURACION_JUEGO['LONGITUD_PALABRA_SECRETA'][0]
+CANTIDAD_INTENTOS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
+LISTA_ARCHIVOS = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
 
 
 def crear_dict_info_jugadores(lista_jugadores):
@@ -20,7 +28,7 @@ def crear_dict_info_jugadores(lista_jugadores):
     dict_info_jugadores = {}
     for cantidad in range(len(lista_jugadores)):
         dict_info_jugadores[lista_jugadores[cantidad]] = {"puntos": 0,
-                                     "posicion": cantidad + 1}
+                                                          "posicion": cantidad + 1}
 
     return dict_info_jugadores
 
@@ -91,7 +99,7 @@ def crear_tablero():
     #Ivan Teuber
     """
     tablero = []
-    for i in range(CANTIDAD_LETRAS):
+    for i in range(CANTIDAD_INTENTOS):
         tablero.append('? ' * CANTIDAD_LETRAS)
 
     return tablero
@@ -137,11 +145,13 @@ def imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=False):
 
 def selecciona_palabra():
     """
-    Selecciona de forma aleatoria una palabra de la lista devuelta por obtener_palabras_validas().
+    Selecciona de forma aleatoria una palabra de la lista generada por el diccionario que contiene todas las palabras adecuadas de los archivos indicados.
     Retorna la palabra seleccionada.
-    #Facundo Talellis - Maximo Utrera - Florencia Russo
+    Florencia Russo
     """
-    lista = obtener_palabras_validas()
+    dict_palabras = obtener_diccionario_palabras_candidatas(LISTA_ARCHIVOS, CANTIDAD_LETRAS)
+    lista = sorted(dict_palabras.keys(), key = lambda dict: dict[0])
+    
     return lista[random.randint(0, len(lista))].upper()
 
 
@@ -194,14 +204,14 @@ def validar_aciertos(palabra_adivinar, arriesgo):
     cantidad_letras = contar_letras(palabra_adivinar)
     palabra_pintada = ''
 
-    for indice in range(len(arriesgo)):
+    for indice in range(CANTIDAD_LETRAS):
         if arriesgo[indice] == palabra_adivinar[indice]:
             palabra_pintada += obtener_color("Verde") + arriesgo[indice] + " "
 
         else:
             palabra_pintada += obtener_color("GrisOscuro") + arriesgo[indice] + " "
 
-    for indice in range(len(arriesgo)):
+    for indice in range(CANTIDAD_LETRAS):
         if (arriesgo[indice] in palabra_adivinar and
                 arriesgo[indice] != palabra_adivinar[indice] and
                 ((palabra_pintada.count(obtener_color("Amarillo") + arriesgo[indice]) +
@@ -240,24 +250,13 @@ def sin_acentos(arriesgo):
     Recibe una palabra. Reemplaza las vocales con acentos. Retorna la misma palabra sin acentos.
     #Ruth Gomez
     """
-    vocales = 'áéíóú'
-    vocales_1 = 'aeiou'
-    palabra_1 = arriesgo.lower()
-    for letra in palabra_1:
-        if letra == vocales[0]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[0])
-        elif letra == vocales[1]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[1])
-        elif letra == vocales[2]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[2])
-        elif letra == vocales[3]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[3])
-        elif letra == vocales[4]:
-            palabra_1 = palabra_1.replace(letra, vocales_1[4])
-        else:
-            pass
 
-    return palabra_1.upper()
+    arrieesgo_sin_acento = ''
+    for c in unicodedata.normalize('NFKD', arriesgo):
+        if unicodedata.category(c) != 'Mn':
+            arrieesgo_sin_acento += c
+    return arrieesgo_sin_acento.upper()
+
 
 def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     """
@@ -270,19 +269,19 @@ def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
      en la segunda posicion.
     #Ruth Gomez - Facundo Talellis
     """
-    diccionario={1:50,2:40,3:30,4:20,5:10}
-    puntos_obtenidos_A = 100
-    puntos_obtenidos_B = 50
+    diccionario = {1: 50, 2: 40, 3: 30, 4: 20, 5: 10}
+    puntos_obtenidos_a = 100
+    puntos_obtenidos_b = 50
     puntos_partida = []
 
-    if ganador == '' : #no gano nadie
+    if ganador == '':  # no gano nadie
         for jugador in dict_jugadores:
             if jugador == jugador_arranca:
-                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_A
-                puntos_partida.append((jugador, (-puntos_obtenidos_A)))
+                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_a
+                puntos_partida.append((jugador, (-puntos_obtenidos_a)))
             else:
-                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_B
-                puntos_partida.append((jugador, (-puntos_obtenidos_B)))
+                dict_jugadores[jugador]['puntos'] -= puntos_obtenidos_b
+                puntos_partida.append((jugador, (-puntos_obtenidos_b)))
     else:
         for jugador in dict_jugadores:
 
@@ -295,6 +294,7 @@ def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
 
     return puntos_partida
 
+
 def seleccionar_ganador(dict_jugadores):
     """
     Elige al ganador del juego.
@@ -302,7 +302,7 @@ def seleccionar_ganador(dict_jugadores):
     Retorna una tupla con el nombre y los datos del ganador.
     #Florencia Russo
     """
-    return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse = True))[0]
+    return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse=True))[0]
 
 
 def imprimir_puntos_partida(puntos_partida, dict_jugadores):
@@ -331,6 +331,7 @@ def logica_juego(dict_jugadores):
     """
     intentos = 0
     time_start = datetime.now()
+    time_end = None
     palabra_adivinar = selecciona_palabra()
     palabra_oculta = "? " * CANTIDAD_LETRAS
     estado_partida = False
@@ -364,26 +365,26 @@ def logica_juego(dict_jugadores):
     imprimir_puntos_partida(puntos_partida, dict_jugadores)
 
 
-def jugadores_usernames():
-    """
-    Pide el ingreso del nombre de los jugadores.
-    Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
-    Retorna una lista con los jugadores.
-    #Ivan Teuber - Maximo Utrera
-    """
-    user1 = input('Ingrese nombre de usuario: ')
-    user2 = input('Ingrese nombre de usuario del otro jugador: ')
-    while user1 == user2:
-        user2 = input('Debe ser diferente al anterior jugador: ')
-    jugadores = [user1, user2]
-    indice = random.randrange(len(jugadores))
-    p1 = jugadores[indice]
-    if p1 != user1:
-        p2 = user1
-    else:
-        p2 = user2
+# def jugadores_usernames():
+#     """
+#     Pide el ingreso del nombre de los jugadores.
+#     Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
+#     Retorna una lista con los jugadores.
+#     #Ivan Teuber - Maximo Utrera
+#     """
+#     user1 = input('Ingrese nombre de usuario: ')
+#     user2 = input('Ingrese nombre de usuario del otro jugador: ')
+#     while user1 == user2:
+#         user2 = input('Debe ser diferente al anterior jugador: ')
+#     jugadores = [user1, user2]
+#     indice = random.randrange(len(jugadores))
+#     p1 = jugadores[indice]
+#     if p1 != user1:
+#         p2 = user1
+#     else:
+#         p2 = user2
 
-    return [p1, p2]
+#     return [p1, p2]
 
 
 def rejugabilidad():
@@ -392,8 +393,8 @@ def rejugabilidad():
     #Maximo Utrera
     """
     print('\n~ WELCOME TO WORDLE ~')
-
-    jugadores = jugadores_usernames()
+    jugadores = main_login()
+    # jugadores = jugadores_usernames()
     dict_info_jugadores = crear_dict_info_jugadores(jugadores)
     jugar_denuevo = True
 
