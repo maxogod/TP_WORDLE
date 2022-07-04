@@ -3,7 +3,7 @@ import unicodedata
 def sin_acentos(arriesgo):
     """
     Recibe una palabra. Reemplaza las vocales con acentos. Retorna la misma palabra sin acentos.
-    #Ruth Gomez
+    #Ruth Gomez - Maximo Utrera
     """
 
     arrieesgo_sin_acento = ''
