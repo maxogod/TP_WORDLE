@@ -57,7 +57,7 @@ def config_main():
                   'REINICIAR_ARCHIV0_PARTIDAS': [False, 'por default.']}
     config_final = {}
     try:
-        with open("config_file.csv") as config:
+        with open("archivos/config_file.csv") as config:
             config_final = config_dic_mod(config, config_default)
     except FileNotFoundError:
         config_final = config_default

@@ -31,7 +31,7 @@ def validacion_usuario_para_login(username, password):
     retorna un boolean dependiendo si se valida el usuario o no.
     #Maximo Utrera
     """
-    with open("usuarios.csv") as users_file:
+    with open("archivos/usuarios.csv") as users_file:
         username_leido, password_leido = read_file(users_file)
         while username_leido and username != username_leido:
             username_leido, password_leido = read_file(users_file)
