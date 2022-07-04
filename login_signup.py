@@ -98,7 +98,7 @@ def emergent_windows_registro(tipo_msg, username, mensaje):
     #Maximo Utrera
     """
     posibles_msg = {'username invalido': f'Nombre de usuario {username} invalido. '
-                                         'Debe contener letras, numeros y _ unicamente',
+                                         'Debe tener entre 4 y 15 caracteres y estar formado sólo por letras, números y _',
                     'claves diferentes': 'Ambas claves deben ser iguales',
                     'clave invalida': 'Clave invalida. '
                                       'La clave debe tener una longitud de entre 8 y 15 caracteres, '
@@ -136,7 +136,7 @@ def registrar_nuevo_usuario(usuario, clave, clave2, nombre_archivo):
 def validar_nombre_usuario(nombre_usuario):
     '''
     Valida que el nombre de usuario ingresado tenga la longitud deseada y este formado solo por letras,
-    numeros y _ o -.
+    numeros y _.
     Florencia Russo
     '''
     nombre_valido = False
@@ -144,7 +144,7 @@ def validar_nombre_usuario(nombre_usuario):
     largo_max = 15
     nombre_letras = nombre_usuario.replace('_', '')
     if ((largo_min <= len(nombre_usuario) <= largo_max) and
-            nombre_letras.isalnum() and '_' in nombre_usuario):
+            (nombre_letras.isalnum() and not nombre_letras.isalpha() and not nombre_letras.isnumeric()) and '_' in nombre_usuario):
         nombre_valido = True
 
     return nombre_valido
