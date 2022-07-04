@@ -58,7 +58,10 @@ def successwindow():
     muestra mensaje de logueado correctamente en una ventana.
     #Maximo Utrera
     """
-    messagebox.showinfo('Success', 'Logueado correctamente, ahora jugador 2 ingrese sus datos.')
+    if Jugadores.p2 == '':
+        messagebox.showinfo('Success', 'Jugador 1 logueado correctamente. (Falta jugador 2!)')
+    else:
+        messagebox.showinfo('Success', 'Jugador 2 logueado correctamente. A JUGAR!')
 
 
 def errorwindow():
