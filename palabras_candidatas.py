@@ -50,7 +50,7 @@ def crear_archivo_csv(diccionario_palabras, cantidad_archivos):
     No tiene retorno.
     Florencia Russo
     '''
-    archivo_csv = open('palabras.csv', 'w', encoding = 'utf8')
+    archivo_csv = open('archivos/palabras.csv', 'w', encoding = 'utf8')
     dict_ordenado = sorted(diccionario_palabras.items(), key = lambda dict: dict[0])
     for clave in dict_ordenado:
         lista_cantidades = ''
