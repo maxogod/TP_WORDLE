@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 
+
 class Jugadores:
     """
     Clase jugadores para guardar los usernames de p1 y p2.
@@ -14,6 +15,7 @@ class Jugadores:
             Jugadores.p1 = username
         elif Jugadores.p2 == '':
             Jugadores.p2 = username
+
 
 def read_file(filename):
     """
@@ -66,6 +68,7 @@ def errorwindow():
     """
     messagebox.showerror('Error', 'Error, El usuario o la contraceña no son correctos.')
 
+
 def aplicar_login(username, password, usernameEntry, passwordEntry):
     '''
     Se la llama en el boton de login. Llama a la funcion emergentwindow y limpia las entradas para usuario y clave.
@@ -74,6 +77,7 @@ def aplicar_login(username, password, usernameEntry, passwordEntry):
     emergentwindow(username, password)
     usernameEntry.delete(0, END)
     passwordEntry.delete(0, END)
+
 
 def aplicar_register(username, password, password2, rootRegistro, nombre_archivo):
     '''
@@ -84,18 +88,19 @@ def aplicar_register(username, password, password2, rootRegistro, nombre_archivo
     registrar_nuevo_usuario(username, password, password2, nombre_archivo)
     rootRegistro.destroy()
 
+
 def emergent_windows_registro(tipo_msg, username, mensaje):
     """
     muestra los mendajes correspondientes segun los parametros.
     #Maximo Utrera
     """
-    posibles_msg = {'username invalido' : f'Nombre de usuario {username} invalido. '
-                                          'Debe contener letras, numeros y _ unicamente',
-                    'claves diferentes' : 'Ambas claves deben ser iguales',
-                    'clave invalida' : 'Clave invalida. '
-                                       'La clave debe tener una longitud de entre 8 y 15 caracteres, '
-                                       'y estar formada por al menos una mayuscula, una minuscula y _ o -',
-                    'usuario creado' : f'Usuario {username} fue creado.',
+    posibles_msg = {'username invalido': f'Nombre de usuario {username} invalido. '
+                                         'Debe contener letras, numeros y _ unicamente',
+                    'claves diferentes': 'Ambas claves deben ser iguales',
+                    'clave invalida': 'Clave invalida. '
+                                      'La clave debe tener una longitud de entre 8 y 15 caracteres, '
+                                      'y estar formada por al menos una mayuscula, una minuscula y _ o -',
+                    'usuario creado': f'Usuario {username} fue creado.',
                     'ya registrado': f'Usuario {username} ya registrado'}
     if tipo_msg == 'error':
         messagebox.showerror('error', posibles_msg[mensaje])
@@ -103,6 +108,7 @@ def emergent_windows_registro(tipo_msg, username, mensaje):
         messagebox.showinfo('success', posibles_msg[mensaje])
     elif tipo_msg == 'warning':
         messagebox.showwarning('warning', posibles_msg[mensaje])
+
 
 def registrar_nuevo_usuario(usuario, clave, clave2, nombre_archivo):
     '''
@@ -115,13 +121,14 @@ def registrar_nuevo_usuario(usuario, clave, clave2, nombre_archivo):
     elif clave != clave2:
         emergent_windows_registro('error', usuario, 'claves diferentes')
     elif not validar_clave(clave):
-       emergent_windows_registro('error', usuario, 'clave invalida')
+        emergent_windows_registro('error', usuario, 'clave invalida')
     elif not validacion_usuario_para_login(usuario, clave):
-        with open(nombre_archivo, 'a', encoding = "utf8") as archivo:
+        with open(nombre_archivo, 'a', encoding="utf8") as archivo:
             archivo.write(f'{usuario},{clave}\n')
         emergent_windows_registro('info', usuario, 'usuario creado')
-    else: 
+    else:
         emergent_windows_registro('warning', usuario, 'ya registrado')
+
 
 def validar_nombre_usuario(nombre_usuario):
     '''
@@ -136,8 +143,9 @@ def validar_nombre_usuario(nombre_usuario):
     if ((largo_min <= len(nombre_usuario) <= largo_max) and
             nombre_letras.isalnum() and '_' in nombre_usuario):
         nombre_valido = True
-    
+
     return nombre_valido
+
 
 def validar_clave(clave):
     '''
@@ -157,23 +165,24 @@ def validar_clave(clave):
     if ((largo_min <= len(clave) <= largo_max) and ('_' in clave or '-' in clave)):
         i = 0
         while (i < len(clave_sin_guion) and not clave_valida):
-            if(clave_sin_guion[i].isupper()):
+            if (clave_sin_guion[i].isupper()):
                 mayuscula += 1
-            elif(clave_sin_guion[i].islower()):
+            elif (clave_sin_guion[i].islower()):
                 minuscula += 1
-            elif(clave_sin_guion[i].isnumeric()):
+            elif (clave_sin_guion[i].isnumeric()):
                 numero += 1
-            elif(not clave_sin_guion[i].isalnum()):
-                caracteres +=1
-            elif(clave_sin_guion[i] in 'áéíóú'):
+            elif (not clave_sin_guion[i].isalnum()):
+                caracteres += 1
+            elif (clave_sin_guion[i] in 'áéíóú'):
                 tildes += 1
-            
+
             i += 1
 
-            if(numero>0 and mayuscula>0 and minuscula>0 and caracteres == 0 and tildes == 0):
+            if (numero > 0 and mayuscula > 0 and minuscula > 0 and caracteres == 0 and tildes == 0):
                 clave_valida = True
-        
+
     return clave_valida
+
 
 def gui_registro():
     '''
@@ -186,7 +195,7 @@ def gui_registro():
     rootRegistro = Toplevel()
     rootRegistro.iconbitmap('archivos/pikachu.ico')
     rootRegistro.title("Wordle G1 | Sign-up")
-    rootRegistro.resizable(0,0)
+    rootRegistro.resizable(0, 0)
     rootRegistro.geometry("350x150")
     rootRegistro.config(bg='sky blue')
 
@@ -201,42 +210,42 @@ def gui_registro():
     contrasenaRegistro = StringVar()
     contrasenaReingreso = StringVar()
 
-    etiquetaUsuario = Label(frameRegistro, text = 'Nombre de Usuario')
-    etiquetaUsuario.grid(row = 0, column = 0, sticky = 'w')
+    etiquetaUsuario = Label(frameRegistro, text='Nombre de Usuario')
+    etiquetaUsuario.grid(row=0, column=0, sticky='w')
     etiquetaUsuario.config(bg='black')
     etiquetaUsuario.config(fg='white')
-    textBoxUsuario = Entry(frameRegistro, textvariable = usuarioRegistro)
-    textBoxUsuario.grid(row = 0, column = 1, sticky = 'w')
-    textBoxUsuario.config(bg = 'black')
+    textBoxUsuario = Entry(frameRegistro, textvariable=usuarioRegistro)
+    textBoxUsuario.grid(row=0, column=1, sticky='w')
+    textBoxUsuario.config(bg='black')
     textBoxUsuario.config(fg='white')
 
-    etiquetaContrasena = Label(frameRegistro, text = 'Contraseña')
-    etiquetaContrasena.grid(row = 1, column = 0, sticky = 'w')
+    etiquetaContrasena = Label(frameRegistro, text='Contraseña')
+    etiquetaContrasena.grid(row=1, column=0, sticky='w')
     etiquetaContrasena.config(bg='black')
     etiquetaContrasena.config(fg='white')
-    textBoxContrasena = Entry(frameRegistro, textvariable = contrasenaRegistro)
-    textBoxContrasena.grid(row = 1, column = 1, sticky = 'w')
-    textBoxContrasena.config(show = '*')
+    textBoxContrasena = Entry(frameRegistro, textvariable=contrasenaRegistro)
+    textBoxContrasena.grid(row=1, column=1, sticky='w')
+    textBoxContrasena.config(show='*')
     textBoxContrasena.config(bg='black')
     textBoxContrasena.config(fg='white')
 
-    etiquetaContrasenaReingreso = Label(frameRegistro, text = 'Reingrese Contraseña')
-    etiquetaContrasenaReingreso.grid(row = 2, column = 0, sticky = 'w')
+    etiquetaContrasenaReingreso = Label(frameRegistro, text='Reingrese Contraseña')
+    etiquetaContrasenaReingreso.grid(row=2, column=0, sticky='w')
     etiquetaContrasenaReingreso.config(bg='black')
     etiquetaContrasenaReingreso.config(fg='white')
-    textBoxContrasenaReingreso = Entry(frameRegistro, textvariable = contrasenaReingreso)
-    textBoxContrasenaReingreso.grid(row = 2, column = 1, sticky = 'w')
-    textBoxContrasenaReingreso.config(show = '*')
+    textBoxContrasenaReingreso = Entry(frameRegistro, textvariable=contrasenaReingreso)
+    textBoxContrasenaReingreso.grid(row=2, column=1, sticky='w')
+    textBoxContrasenaReingreso.config(show='*')
     textBoxContrasenaReingreso.config(bg='black')
     textBoxContrasenaReingreso.config(fg='white')
 
     botonRegistro = Button(rootRegistro,
-                           text = "Enter",
-                           command = lambda : aplicar_register(usuarioRegistro.get(),
-                                                               contrasenaRegistro.get(),
-                                                               contrasenaReingreso.get(),
-                                                               rootRegistro, 'archivos/usuarios.csv'))
-    botonRegistro.grid(row = 5, column = 2)
+                           text="Enter",
+                           command=lambda: aplicar_register(usuarioRegistro.get(),
+                                                            contrasenaRegistro.get(),
+                                                            contrasenaReingreso.get(),
+                                                            rootRegistro, 'archivos/usuarios.csv'))
+    botonRegistro.grid(row=5, column=2)
 
 
 def gui():
@@ -247,57 +256,57 @@ def gui():
     los botones de registro y exit.
     #Florencia russo
     """
-    #Root of GUI
+    # Root of GUI
     root = Tk()
     root.iconbitmap('archivos/pikachu.ico')
     root.title('Wordle G1 | Log-in')
     root.resizable(False, False)
     root.geometry('350x200')
-    root.config(bg= 'hot pink')
+    root.config(bg='hot pink')
 
-    #Frame of GUI
+    # Frame of GUI
     frame = Frame(root)
-    frame.config(bg= 'black')
+    frame.config(bg='black')
     frame.config(relief='groove')
     frame.config(bd=5)
-    frame.grid(rowspan = 5, columnspan = 5, padx=70, pady=20)
+    frame.grid(rowspan=5, columnspan=5, padx=70, pady=20)
 
-    #All the labels below
+    # All the labels below
     LabelUser = Label(frame, text='Username:')
-    LabelUser.config(bg= 'black')
-    LabelUser.config(fg= 'white')
-    LabelUser.grid(row = 0, column= 0, padx= 5, pady= 10)
+    LabelUser.config(bg='black')
+    LabelUser.config(fg='white')
+    LabelUser.grid(row=0, column=0, padx=5, pady=10)
 
-    LabelPassword = Label(frame, text= 'Password:')
-    LabelPassword.config(bg= 'black')
-    LabelPassword.config(fg= 'white')
+    LabelPassword = Label(frame, text='Password:')
+    LabelPassword.config(bg='black')
+    LabelPassword.config(fg='white')
     LabelPassword.grid(row=1, column=0, padx=5, pady=5)
 
-    #All the entries below
+    # All the entries below
     UsernameEntry = Entry(frame)
     UsernameEntry.config(bg='black')
     UsernameEntry.config(fg='white')
-    UsernameEntry.grid(row = 0, column= 1, padx= 5, pady= 10)
+    UsernameEntry.grid(row=0, column=1, padx=5, pady=10)
 
     PasswordEntry = Entry(frame)
     PasswordEntry.config(bg='black')
     PasswordEntry.config(fg='white')
     PasswordEntry.config(show='*')
-    PasswordEntry.grid(row = 1, column= 1, padx= 5, pady= 5)
+    PasswordEntry.grid(row=1, column=1, padx=5, pady=5)
 
-    #Buttons
+    # Buttons
     ButtonEnter = Button(root, text='Enter',
-                         command= lambda: aplicar_login(UsernameEntry.get(), PasswordEntry.get(), UsernameEntry, PasswordEntry))
-    ButtonEnter.grid(row = 5, column= 1, padx= 5, pady= 5)
-    
+                         command=lambda: aplicar_login(UsernameEntry.get(), PasswordEntry.get(), UsernameEntry,
+                                                       PasswordEntry))
+    ButtonEnter.grid(row=5, column=1, padx=5, pady=5)
+
     ButtonRegister = Button(root, text='Register',
-                         command = gui_registro)
-    ButtonRegister.grid(row = 5, column= 3, padx= 5, pady= 5)
+                            command=gui_registro)
+    ButtonRegister.grid(row=5, column=3, padx=5, pady=5)
 
     ButtonOut = Button(root, text='Exit login',
-                         command = lambda: root.destroy())
-    ButtonOut.grid(row = 6, column= 2, padx= 5, pady= 5)
-    
+                       command=lambda: root.destroy())
+    ButtonOut.grid(row=6, column=2, padx=5, pady=5)
 
     root.mainloop()
 
