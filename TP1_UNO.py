@@ -10,7 +10,8 @@ from palabras import sin_acentos
 # Variables globales
 CONFIGURACION_JUEGO = config_main()
 CANTIDAD_LETRAS = CONFIGURACION_JUEGO['LONGITUD_PALABRA_SECRETA'][0]
-CANTIDAD_INTENTOS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
+CANTIDAD_INTENTOS = 5
+MAX_PARTIDAS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
 LISTA_ARCHIVOS = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
 
 
