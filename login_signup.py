@@ -2,6 +2,10 @@ from tkinter import *
 from tkinter import messagebox
 
 class Jugadores:
+    """
+    Clase jugadores para guardar los usernames de p1 y p2.
+    #Maximo Utrera
+    """
     p1 = ''
     p2 = ''
 
@@ -12,13 +16,21 @@ class Jugadores:
             Jugadores.p2 = username
 
 def read_file(filename):
-    #Puede ser reemplazada por otra funcion que haga lo mismo,
-    #pero cuidado con el return default ['', '']
+    """
+    Lee archivo.
+    #Maximo Utrera
+    """
     line = filename.readline()
     return line.rstrip('\n').split(',') if line else ['', '']
 
 
-def validacion(username, password):
+def validacion_usuario_para_login(username, password):
+    """
+    Abre el archivo de usuarios y corrobora que el nombre de usuario se encuentre en este,
+    asi como la contraseña sea correcta.
+    retorna un boolean dependiendo si se valida el usuario o no.
+    #Maximo Utrera
+    """
     with open("usuarios.csv") as users_file:
         username_leido, password_leido = read_file(users_file)
         while username_leido and username != username_leido:
@@ -28,7 +40,12 @@ def validacion(username, password):
 
 
 def emergentwindow(username, password):
-    if validacion(username, password):
+    """
+    si se valido el usuario y contraseña llama a funcion successwindow sino a errorwindow.
+    #Maximo Utrera
+    """
+    #TODO change window messages accordingly
+    if validacion_usuario_para_login(username, password):
         Jugadores(username)
         successwindow()
     else:
@@ -36,10 +53,18 @@ def emergentwindow(username, password):
 
 
 def successwindow():
+    """
+    muestra mensaje de logueado correctamente en una ventana.
+    #Maximo Utrera
+    """
     messagebox.showinfo('Success', 'Logueado correctamente')
 
 
 def errorwindow():
+    """
+    muestra mensaje de error al loguearse en una ventana.
+    #Maximo Utrera
+    """
     messagebox.showerror('Error', 'Error, No pudo loguearse, o no esta registrado '
                                   'o ya esta logueado')
 
@@ -71,7 +96,7 @@ def registrar_nuevo_usuario(usuario, clave, clave2, nombre_archivo):
         messagebox.showerror('', f'Ambas claves deben ser iguales')
     elif(not validar_clave(clave)):
        messagebox.showerror('', f'Clave invalida. La clave debe tener una longitud de entre 8 y 15 caracteres, y estar formada por al menos una mayuscula, una minuscula y _ o -')
-    elif (not validacion(usuario, clave)):
+    elif (not validacion_usuario_para_login(usuario, clave)):
         with open(nombre_archivo, 'a', encoding = "utf8") as archivo:
             archivo.write(f'{usuario},{clave}\n')
         messagebox.showinfo("", f'Usuario {usuario} creado')
@@ -133,6 +158,7 @@ def gui_registro():
     Crea la pantalla con el formulario de registro.
     Florencia Russo
     '''
+    #TODO make gui look better
     rootRegistro = Toplevel()
     rootRegistro.title("Wordle G1 - Registrar nuevo usuario")
     rootRegistro.resizable(0,0)
@@ -142,31 +168,38 @@ def gui_registro():
     frameRegistro.pack()
 
     usuarioRegistro = StringVar()
-    contraseñaRegistro = StringVar()
-    contraseñaReingreso = StringVar()
+    contrasenaRegistro = StringVar()
+    contrasenaReingreso = StringVar()
 
     etiquetaUsuario = Label(frameRegistro, text = 'Nombre de Usuario')
     etiquetaUsuario.grid(row = 0, column = 0, sticky = 'w')
     textBoxUsuario = Entry(frameRegistro, textvariable = usuarioRegistro)
     textBoxUsuario.grid(row = 0, column = 1, sticky = 'w')
 
-    etiquetaContraseña = Label(frameRegistro, text = 'Contraseña')
-    etiquetaContraseña.grid(row = 1, column = 0, sticky = 'w')
-    textBoxContraseña = Entry(frameRegistro, textvariable = contraseñaRegistro)
-    textBoxContraseña.grid(row = 1, column = 1, sticky = 'w')
-    textBoxContraseña.config(show = '*')
+    etiquetaContrasena = Label(frameRegistro, text = 'Contraseña')
+    etiquetaContrasena.grid(row = 1, column = 0, sticky = 'w')
+    textBoxContrasena = Entry(frameRegistro, textvariable = contrasenaRegistro)
+    textBoxContrasena.grid(row = 1, column = 1, sticky = 'w')
+    textBoxContrasena.config(show = '*')
 
-    etiquetaContraseñaReingreso = Label(frameRegistro, text = 'Reingrese Contraseña')
-    etiquetaContraseñaReingreso.grid(row = 2, column = 0, sticky = 'w')
-    textBoxContraseñaReingreso = Entry(frameRegistro, textvariable = contraseñaReingreso)
-    textBoxContraseñaReingreso.grid(row = 2, column = 1, sticky = 'w')
-    textBoxContraseñaReingreso.config(show = '*')
+    etiquetaContrasenaReingreso = Label(frameRegistro, text = 'Reingrese Contraseña')
+    etiquetaContrasenaReingreso.grid(row = 2, column = 0, sticky = 'w')
+    textBoxContrasenaReingreso = Entry(frameRegistro, textvariable = contrasenaReingreso)
+    textBoxContrasenaReingreso.grid(row = 2, column = 1, sticky = 'w')
+    textBoxContrasenaReingreso.config(show = '*')
 
     botonRegistro = Button(frameRegistro, text = "Aceptar", command = lambda : aplicar_register(usuarioRegistro.get(), contraseñaRegistro.get(), contraseñaReingreso.get(), rootRegistro, 'usuarios.csv'))
     botonRegistro.grid(row = 3, column = 1, sticky = 'w')
 
 
 def gui():
+    """
+    la intefaz grafica Main del modulo, en esta se encuentra el login con su boton de enter y
+    las entradas de texto.
+    #Maximo Utrera
+    y los botones para registro y exit.
+    #Florencia Russo
+    """
     #Root of GUI
     root = Tk()
     root.iconbitmap('archivos/icono.ico')
@@ -223,6 +256,11 @@ def gui():
 
 
 def main_login():
+    """
+    funcion principal, la cual debe ser llamada para correr tod0 el modulo,
+    retorna una lista con los nombres del p1 y p2 (obtenidos de la clase Jugadores).
+    #Maximo Utrera
+    """
     gui()
     l_jugadores = [Jugadores.p1, Jugadores.p2]
     return l_jugadores
