@@ -1,12 +1,30 @@
+<<<<<<< HEAD
 from utiles import obtener_color, obtener_palabras_validas
+=======
+from utiles import obtener_color
+>>>>>>> Flor
 import random
 import itertools
 import unicodedata
 from datetime import datetime
+<<<<<<< HEAD
 
 # Variables globales
 CANTIDAD_LETRAS = 5
 CANTIDAD_INTENTOS = 5
+=======
+from gameconfig import config_main
+from palabras_candidatas import obtener_diccionario_palabras_candidatas
+from login_signup import main_login
+
+# Variables globales
+# CANTIDAD_LETRAS = 5
+# CANTIDAD_INTENTOS = 5
+CONFIGURACION_JUEGO = config_main()
+CANTIDAD_LETRAS = CONFIGURACION_JUEGO['LONGITUD_PALABRA_SECRETA'][0]
+CANTIDAD_INTENTOS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
+LISTA_ARCHIVOS = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
+>>>>>>> Flor
 
 
 def crear_dict_info_jugadores(lista_jugadores):
@@ -92,7 +110,11 @@ def crear_tablero():
     #Ivan Teuber
     """
     tablero = []
+<<<<<<< HEAD
     for i in range(CANTIDAD_LETRAS):
+=======
+    for i in range(CANTIDAD_INTENTOS):
+>>>>>>> Flor
         tablero.append('? ' * CANTIDAD_LETRAS)
 
     return tablero
@@ -138,11 +160,21 @@ def imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=False):
 
 def selecciona_palabra():
     """
+<<<<<<< HEAD
     Selecciona de forma aleatoria una palabra de la lista devuelta por obtener_palabras_validas().
     Retorna la palabra seleccionada.
     #Facundo Talellis - Maximo Utrera - Florencia Russo
     """
     lista = obtener_palabras_validas()
+=======
+    Selecciona de forma aleatoria una palabra de la lista generada por el diccionario que contiene todas las palabras adecuadas de los archivos indicados.
+    Retorna la palabra seleccionada.
+    Florencia Russo
+    """
+    dict_palabras = obtener_diccionario_palabras_candidatas(LISTA_ARCHIVOS, CANTIDAD_LETRAS)
+    lista = sorted(dict_palabras.keys(), key = lambda dict: dict[0])
+    
+>>>>>>> Flor
     return lista[random.randint(0, len(lista))].upper()
 
 
@@ -356,6 +388,7 @@ def logica_juego(dict_jugadores):
     imprimir_puntos_partida(puntos_partida, dict_jugadores)
 
 
+<<<<<<< HEAD
 def jugadores_usernames():
     """
     Pide el ingreso del nombre de los jugadores.
@@ -376,6 +409,28 @@ def jugadores_usernames():
         p2 = user2
 
     return [p1, p2]
+=======
+# def jugadores_usernames():
+#     """
+#     Pide el ingreso del nombre de los jugadores.
+#     Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
+#     Retorna una lista con los jugadores.
+#     #Ivan Teuber - Maximo Utrera
+#     """
+#     user1 = input('Ingrese nombre de usuario: ')
+#     user2 = input('Ingrese nombre de usuario del otro jugador: ')
+#     while user1 == user2:
+#         user2 = input('Debe ser diferente al anterior jugador: ')
+#     jugadores = [user1, user2]
+#     indice = random.randrange(len(jugadores))
+#     p1 = jugadores[indice]
+#     if p1 != user1:
+#         p2 = user1
+#     else:
+#         p2 = user2
+
+#     return [p1, p2]
+>>>>>>> Flor
 
 
 def rejugabilidad():
@@ -384,8 +439,13 @@ def rejugabilidad():
     #Maximo Utrera
     """
     print('\n~ WELCOME TO WORDLE ~')
+<<<<<<< HEAD
 
     jugadores = jugadores_usernames()
+=======
+    jugadores = main_login()
+    # jugadores = jugadores_usernames()
+>>>>>>> Flor
     dict_info_jugadores = crear_dict_info_jugadores(jugadores)
     jugar_denuevo = True
 
