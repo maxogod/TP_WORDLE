@@ -10,7 +10,9 @@ def imprimir_y_guardar_info_partidas_jugadas(lista_partidas, reinicio_archivo):
     print("Partida    Fecha Partida    Hora Finalizacion    Nombre Jugador    Aciertos    Intentos")
     lista_partidas.sort(key = lambda tuple: tuple[4], reverse = True ) 
     for partida in lista_partidas:
-        print(f'{partida[0]}    {partida[1]}    {partida[2]}    {partida[3]}    {partida[4]}    {partida[5]}')
+        print('{}\t\t\t{}\t\t\t{}\t\t\t{}\t\t\t\t{}\t\t\t{}'.format(
+            partida[0], partida[1], partida[2], partida[3], partida[4], partida[5]
+        ))
         lista_datos.append(f'{partida[1]},{partida[2]},{partida[3]},{partida[4]},{partida[5]}')
 
     modo = 'w' if (reinicio_archivo) else 'a'
