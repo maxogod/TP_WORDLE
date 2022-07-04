@@ -6,12 +6,14 @@ from gameconfig import config_main
 from palabras_candidatas import obtener_diccionario_palabras_candidatas
 from login_signup import main_login
 from palabras import sin_acentos
+import partidas
 
 # Variables globales
 CONFIGURACION_JUEGO = config_main()
 CANTIDAD_LETRAS = CONFIGURACION_JUEGO['LONGITUD_PALABRA_SECRETA'][0]
 CANTIDAD_INTENTOS = 5
 MAX_PARTIDAS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
+REINICIO_ARCHIVO_PARTIDAS = CONFIGURACION_JUEGO['REINICIAR_ARCHIV0_PARTIDAS'][0]
 LISTA_ARCHIVOS = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
 
 
@@ -27,9 +29,15 @@ def crear_dict_info_jugadores(lista_jugadores):
     dict_info_jugadores = {}
     for cantidad in range(len(lista_jugadores)):
         dict_info_jugadores[lista_jugadores[cantidad]] = {"puntos": 0,
-                                                          "posicion": cantidad + 1}
+                                                          "posicion": cantidad + 1,
+                                                          "intentos": [],
+                                                          "aciertos": 0}
 
     return dict_info_jugadores
+
+def inicializar_intentos_jugadores(dict_jugadores):
+    for jugador in dict_jugadores:
+        dict_jugadores[jugador]['intentos'] = []
 
 
 def cambiar_posicion_jugadores(dict_info_jugadores):
@@ -321,11 +329,13 @@ def logica_juego(dict_jugadores):
     palabra_oculta = "? " * CANTIDAD_LETRAS
     estado_partida = False
     lista_jugador = dividir_turnos_jugadores(dict_jugadores, CANTIDAD_INTENTOS)
+    inicializar_intentos_jugadores(dict_jugadores)
     ganador = ''
     tablero = crear_tablero()
     while intentos < CANTIDAD_INTENTOS and not estado_partida:
         print("\nJuega", lista_jugador[intentos].upper())
         arriesgo = imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero)
+        dict_jugadores[lista_jugador[intentos]]['intentos'].append(intentos+1)
         arriesgo = validar_palabra(arriesgo)
         arriesgo = validar_aciertos(palabra_adivinar, arriesgo)
         palabra_oculta = ocultar_letras_no_adivinadas(palabra_adivinar, arriesgo, palabra_oculta)
@@ -337,6 +347,7 @@ def logica_juego(dict_jugadores):
             time_end = datetime.now()
             if estado_partida:
                 ganador = lista_jugador[intentos]
+                dict_jugadores[ganador]["aciertos"] += 1
         intentos += 1
 
     delta_time = time_end - time_start
@@ -358,19 +369,26 @@ def rejugabilidad():
     """
     print('\n~ WELCOME TO WORDLE ~')
     jugadores = main_login()
-    # jugadores = jugadores_usernames()
     dict_info_jugadores = crear_dict_info_jugadores(jugadores)
     jugar_denuevo = True
+    cant_partidas = 1
+    lista_partidas = []
 
-    while jugar_denuevo:
+    while (jugar_denuevo and cant_partidas <= MAX_PARTIDAS):
         logica_juego(dict_info_jugadores)
-        desea_seguir = (input('Jugar de nuevo (S/N): ')).upper()
-        while desea_seguir not in 'SN':
-            desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
-        cambiar_posicion_jugadores(dict_info_jugadores)
-        if desea_seguir == 'N':
-            jugar_denuevo = False
-            print('\nGracias por jugar!')
+        fecha_partida = datetime.now()
+        partidas.actualizar_lista_partida(lista_partidas, cant_partidas, dict_info_jugadores, fecha_partida.strftime("%d/%m/%Y"), fecha_partida.strftime("%H:%M:%S"))
+        cant_partidas += 1
+        if (cant_partidas <= MAX_PARTIDAS):
+            desea_seguir = (input('Jugar de nuevo (S/N): ')).upper()
+            while desea_seguir not in 'SN':
+                desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
+            cambiar_posicion_jugadores(dict_info_jugadores)
+            if desea_seguir == 'N':
+                jugar_denuevo = False
+
+    partidas.imprimir_y_guardar_info_partidas_jugadas(lista_partidas, REINICIO_ARCHIVO_PARTIDAS)       
+    print('\nGracias por jugar!')
     ganador = seleccionar_ganador(dict_info_jugadores)
     print(f"El ganador es {ganador[0].upper()} con un total de {ganador[1]['puntos']} puntos")
 
