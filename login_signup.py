@@ -61,7 +61,7 @@ def successwindow():
     if Jugadores.p2 == '':
         messagebox.showinfo('Success', 'Jugador 1 logueado correctamente. (Falta jugador 2!)')
     else:
-        messagebox.showinfo('Success', 'Jugador 2 logueado correctamente. A JUGAR!')
+        messagebox.showinfo('Success', 'Jugador 2 logueado correctamente. A JUGAR!\n(ya pueden cerrar el login)')
 
 
 def errorwindow():
