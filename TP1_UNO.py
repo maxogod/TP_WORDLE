@@ -8,8 +8,6 @@ from login_signup import main_login
 from palabras import sin_acentos
 
 # Variables globales
-# CANTIDAD_LETRAS = 5
-# CANTIDAD_INTENTOS = 5
 CONFIGURACION_JUEGO = config_main()
 CANTIDAD_LETRAS = CONFIGURACION_JUEGO['LONGITUD_PALABRA_SECRETA'][0]
 CANTIDAD_INTENTOS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
