@@ -1,11 +1,11 @@
 from utiles import obtener_color
 import random
 import itertools
-import unicodedata
 from datetime import datetime
 from gameconfig import config_main
 from palabras_candidatas import obtener_diccionario_palabras_candidatas
 from login_signup import main_login
+from palabras import sin_acentos
 
 # Variables globales
 # CANTIDAD_LETRAS = 5
@@ -244,20 +244,6 @@ def validar_palabra(arriesgo):
 
     return (sin_acentos(arriesgo)).upper()
 
-
-def sin_acentos(arriesgo):
-    """
-    Recibe una palabra. Reemplaza las vocales con acentos. Retorna la misma palabra sin acentos.
-    #Ruth Gomez
-    """
-
-    arrieesgo_sin_acento = ''
-    for c in unicodedata.normalize('NFKD', arriesgo):
-        if unicodedata.category(c) != 'Mn':
-            arrieesgo_sin_acento += c
-    return arrieesgo_sin_acento.upper()
-
-
 def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     """
     Define cuantos puntos se le asigna a cada jugador por partida.
@@ -364,27 +350,6 @@ def logica_juego(dict_jugadores):
 
     imprimir_puntos_partida(puntos_partida, dict_jugadores)
 
-
-# def jugadores_usernames():
-#     """
-#     Pide el ingreso del nombre de los jugadores.
-#     Valida que los nombres no esten repetidos y pide reingreso en caso necesario.
-#     Retorna una lista con los jugadores.
-#     #Ivan Teuber - Maximo Utrera
-#     """
-#     user1 = input('Ingrese nombre de usuario: ')
-#     user2 = input('Ingrese nombre de usuario del otro jugador: ')
-#     while user1 == user2:
-#         user2 = input('Debe ser diferente al anterior jugador: ')
-#     jugadores = [user1, user2]
-#     indice = random.randrange(len(jugadores))
-#     p1 = jugadores[indice]
-#     if p1 != user1:
-#         p2 = user1
-#     else:
-#         p2 = user2
-
-#     return [p1, p2]
 
 
 def rejugabilidad():
