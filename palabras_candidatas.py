@@ -1,3 +1,5 @@
+from palabras import sin_acentos
+
 def agregar_palabra_candidata_a_diccionario(diccionario_palabras, palabra, cantidad_letras_palabra, indice_archivo):
     '''
     Recibe un diccionario con las palabras a adivinar, la palabra a agregar al diccionario, la cantidad de letras que deben tener las palabras candidatas, y un numero identificatorio de archivo.
@@ -6,20 +8,19 @@ def agregar_palabra_candidata_a_diccionario(diccionario_palabras, palabra, canti
     '''
     palabra_sin_acentos_ni_signos = sin_acentos_ni_signos(palabra)
     if (palabra_sin_acentos_ni_signos.isalpha() and (len(palabra_sin_acentos_ni_signos) == cantidad_letras_palabra)):
-        if (palabra_sin_acentos_ni_signos.upper() not in diccionario_palabras.keys()):
-            diccionario_palabras[palabra_sin_acentos_ni_signos.upper()] = {indice_archivo: 1}
+        if (palabra_sin_acentos_ni_signos not in diccionario_palabras.keys()):
+            diccionario_palabras[palabra_sin_acentos_ni_signos] = {indice_archivo: 1}
         elif(indice_archivo not in diccionario_palabras[palabra_sin_acentos_ni_signos.upper()].keys()):
-            diccionario_palabras[palabra_sin_acentos_ni_signos.upper()][indice_archivo] = 1
+            diccionario_palabras[palabra_sin_acentos_ni_signos][indice_archivo] = 1
         else:
-            diccionario_palabras[palabra_sin_acentos_ni_signos.upper()][indice_archivo] += 1
+            diccionario_palabras[palabra_sin_acentos_ni_signos][indice_archivo] += 1
 
 def sin_acentos_ni_signos(palabra):
     '''
     Recibe una palabra. Retorna la misma con sus vocales sin acentos y sin signos de puntuacion. Por ejemplo, 'murciélago,' --> murcielago 
     Florencia Russo
     '''
-    # palabra_sin_acento = sin_acentos(palabra)
-    palabra_sin_acento = palabra
+    palabra_sin_acento = sin_acentos(palabra)
     palabra_sin_signos = ''
     signos_puntuacion = ',.:;¡!¿?-_'
 
@@ -27,7 +28,7 @@ def sin_acentos_ni_signos(palabra):
         if (caracter not in signos_puntuacion):
             palabra_sin_signos += caracter
     
-    return palabra_sin_acento
+    return palabra_sin_acento.upper()
 
 def obtener_palabras_de_archivo(diccionario_palabras, nombre_archivo, indice_archivo, cantidad_letras_palabra):
     '''
