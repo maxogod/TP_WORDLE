@@ -194,11 +194,9 @@ def gui_registro():
 
 def gui():
     """
-    la intefaz grafica Main del modulo, en esta se encuentra el login con su boton de enter y
-    las entradas de texto.
+    la intefaz grafica Main del modulo usada para el login de cada usuario, y trabaja en conjunto,
+    con la otra gui (la de registro).
     #Maximo Utrera
-    y los botones para registro y exit.
-    #Florencia Russo
     """
     #Root of GUI
     root = Tk()
