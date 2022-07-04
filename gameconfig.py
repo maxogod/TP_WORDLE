@@ -1,8 +1,9 @@
 
 def read_config_file(config):
-    # Esta funcion puede ser reemplazada si ya hay una que lee archivos,
-    # Pero atencion con el return de los dos vacios
-    # Maximo Utrera
+    """
+    Lee archivo.
+    #Maximo Utrera
+    """
     line = config.readline()
     return line.rstrip("\n").split(",") if line else ['','']
 
@@ -12,7 +13,7 @@ def config_dic_mod(config_file, config_dic):
     Modifica y devuelve el diccionario config_dic que obtiene,
     en base a el archivo config_file que recibe abierto, sino puede
     no modificara cierta configuracion.
-    Maximo Utrera
+    #Maximo Utrera
     """
     min_long_palabra = 3
     max_long_palabra = 15
@@ -49,7 +50,7 @@ def config_main():
     """
     retorna lo que obtenga de config_dic_mod, en caso que no se pueda
     acceder al archivo config_file.csv retorna un dic de config por default.
-    Maximo Utrera
+    #Maximo Utrera
     """
     config_default = {'LONGITUD_PALABRA_SECRETA': [5, 'por default.'],
                   'MAXIMO_PARTIDAS': [5, 'por default.'],
