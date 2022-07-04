@@ -1,11 +1,18 @@
 from archivo_csv import crear_archivo_csv
 
 def actualizar_lista_partida(lista_partida, numero_partida, diccionario_jugadores, fecha, hora):
+    """
+    #Ivan Teuber
+    """
     for jugador in diccionario_jugadores:
-        lista_partida.append((numero_partida, fecha, hora, jugador, diccionario_jugadores[jugador]['aciertos'], len(diccionario_jugadores[jugador]["intentos"])))
+        lista_partida.append((numero_partida, fecha, hora, jugador, diccionario_jugadores[jugador]['aciertos'],
+                              len(diccionario_jugadores[jugador]["intentos"])))
 
 
 def imprimir_y_guardar_info_partidas_jugadas(lista_partidas, reinicio_archivo):
+    """
+    #Ivan Teuber
+    """
     lista_datos = []
     print("Partida    Fecha Partida    Hora Finalizacion    Nombre Jugador    Aciertos    Intentos")
     lista_partidas.sort(key = lambda tuple: tuple[4], reverse = True ) 
