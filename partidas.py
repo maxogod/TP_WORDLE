@@ -14,4 +14,4 @@ def imprimir_y_guardar_info_partidas_jugadas(lista_partidas, reinicio_archivo):
         lista_datos.append(f'{partida[1]},{partida[2]},{partida[3]},{partida[4]},{partida[5]}')
 
     modo = 'w' if (reinicio_archivo) else 'a'
-    crear_archivo_csv(lista_datos, 'partidas.csv', modo)
+    crear_archivo_csv(lista_datos, 'archivos/partidas.csv', modo)
