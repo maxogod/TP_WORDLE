@@ -369,28 +369,30 @@ def rejugabilidad():
     """
     print('\n~ WELCOME TO WORDLE ~')
     jugadores = main_login()
-    dict_info_jugadores = crear_dict_info_jugadores(jugadores)
-    jugar_denuevo = True
-    cant_partidas = 1
-    lista_partidas = []
+    if jugadores[0] and jugadores[1]:
+        dict_info_jugadores = crear_dict_info_jugadores(jugadores)
+        jugar_denuevo = True
+        cant_partidas = 1
+        lista_partidas = []
 
-    while (jugar_denuevo and cant_partidas <= MAX_PARTIDAS):
-        logica_juego(dict_info_jugadores)
-        fecha_partida = datetime.now()
-        partidas.actualizar_lista_partida(lista_partidas, cant_partidas, dict_info_jugadores, fecha_partida.strftime("%d/%m/%Y"), fecha_partida.strftime("%H:%M:%S"))
-        cant_partidas += 1
-        if (cant_partidas <= MAX_PARTIDAS):
-            desea_seguir = (input('Jugar de nuevo (S/N): ')).upper()
-            while desea_seguir not in 'SN':
-                desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
-            cambiar_posicion_jugadores(dict_info_jugadores)
-            if desea_seguir == 'N':
-                jugar_denuevo = False
+        while (jugar_denuevo and cant_partidas <= MAX_PARTIDAS):
+            logica_juego(dict_info_jugadores)
+            fecha_partida = datetime.now()
+            partidas.actualizar_lista_partida(lista_partidas, cant_partidas, dict_info_jugadores, fecha_partida.strftime("%d/%m/%Y"), fecha_partida.strftime("%H:%M:%S"))
+            cant_partidas += 1
+            if (cant_partidas <= MAX_PARTIDAS):
+                desea_seguir = (input('Jugar de nuevo (S/N): ')).upper()
+                while desea_seguir not in 'SN':
+                    desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
+                cambiar_posicion_jugadores(dict_info_jugadores)
+                if desea_seguir == 'N':
+                    jugar_denuevo = False
 
-    partidas.imprimir_y_guardar_info_partidas_jugadas(lista_partidas, REINICIO_ARCHIVO_PARTIDAS)       
-    print('\nGracias por jugar!')
-    ganador = seleccionar_ganador(dict_info_jugadores)
-    print(f"El ganador es {ganador[0].upper()} con un total de {ganador[1]['puntos']} puntos")
-
+        partidas.imprimir_y_guardar_info_partidas_jugadas(lista_partidas, REINICIO_ARCHIVO_PARTIDAS)
+        print('\nGracias por jugar!')
+        ganador = seleccionar_ganador(dict_info_jugadores)
+        print(f"El ganador es {ganador[0].upper()} con un total de {ganador[1]['puntos']} puntos")
+    else:
+        print('SE NECESITAN DOS JUGADORES PARA JUGAR!')
 
 rejugabilidad()
