@@ -368,6 +368,10 @@ def rejugabilidad():
     #Maximo Utrera
     """
     print('\n~ WELCOME TO WORDLE ~')
+    print(f'Configuracion usada:'
+          f'\n  Longitud de palabra - {CONFIGURACION_JUEGO["LONGITUD_PALABRA_SECRETA"]}'
+          f'\n  Maximo de partidas - {CONFIGURACION_JUEGO["MAXIMO_PARTIDAS"]}'
+          f'\n  Reiniciar archivo partidas - {CONFIGURACION_JUEGO["REINICIAR_ARCHIV0_PARTIDAS"]}')
     jugadores = main_login()
     if jugadores[0] and jugadores[1]:
         dict_info_jugadores = crear_dict_info_jugadores(jugadores)
