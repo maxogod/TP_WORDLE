@@ -5,7 +5,7 @@ def read_config_file(config):
     #Maximo Utrera
     """
     line = config.readline()
-    return line.rstrip("\n").split(",") if line else ['','']
+    return line.rstrip("\n").split(",") if line else ['', '']
 
 
 def config_dic_mod(config_file, config_dic):
@@ -46,6 +46,7 @@ def config_dic_mod(config_file, config_dic):
 
     return config_dic
 
+
 def config_main():
     """
     retorna lo que obtenga de config_dic_mod, en caso que no se pueda
@@ -53,8 +54,8 @@ def config_main():
     #Maximo Utrera
     """
     config_default = {'LONGITUD_PALABRA_SECRETA': [5, 'por default.'],
-                  'MAXIMO_PARTIDAS': [5, 'por default.'],
-                  'REINICIAR_ARCHIV0_PARTIDAS': [False, 'por default.']}
+                      'MAXIMO_PARTIDAS': [5, 'por default.'],
+                      'REINICIAR_ARCHIV0_PARTIDAS': [False, 'por default.']}
     config_final = {}
     try:
         with open("archivos/config_file.csv") as config:
