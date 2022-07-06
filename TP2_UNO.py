@@ -14,7 +14,8 @@ CANTIDAD_LETRAS = CONFIGURACION_JUEGO['LONGITUD_PALABRA_SECRETA'][0]
 CANTIDAD_INTENTOS = 5
 MAX_PARTIDAS = CONFIGURACION_JUEGO['MAXIMO_PARTIDAS'][0]
 REINICIO_ARCHIVO_PARTIDAS = CONFIGURACION_JUEGO['REINICIAR_ARCHIV0_PARTIDAS'][0]
-LISTA_ARCHIVOS = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt", "archivos/Las 1000 Noches y 1 Noche.txt"]
+LISTA_ARCHIVOS = ["archivos/Cuentos.txt", "archivos/La araña negra - tomo 1.txt",
+                  "archivos/Las 1000 Noches y 1 Noche.txt"]
 
 
 def crear_dict_info_jugadores(lista_jugadores):
@@ -34,6 +35,7 @@ def crear_dict_info_jugadores(lista_jugadores):
                                                           "aciertos": 0}
 
     return dict_info_jugadores
+
 
 def inicializar_intentos_jugadores(dict_jugadores):
     for jugador in dict_jugadores:
@@ -152,12 +154,13 @@ def imprimir_interfaz(palabra_adivinar, palabra_oculta, tablero, fin=False):
 
 def selecciona_palabra():
     """
-    Selecciona de forma aleatoria una palabra de la lista generada por el diccionario que contiene todas las palabras adecuadas de los archivos indicados.
+    Selecciona de forma aleatoria una palabra de la lista generada por el diccionario que contiene todas
+    las palabras adecuadas de los archivos indicados.
     Retorna la palabra seleccionada.
     Florencia Russo
     """
     dict_palabras = obtener_diccionario_palabras_candidatas(LISTA_ARCHIVOS, CANTIDAD_LETRAS)
-    lista = sorted(dict_palabras.keys(), key = lambda dict: dict[0])
+    lista = sorted(dict_palabras.keys(), key=lambda dic: dic[0])
     
     return lista[random.randint(0, len(lista))].upper()
 
@@ -222,8 +225,8 @@ def validar_aciertos(palabra_adivinar, arriesgo):
         if (arriesgo[indice] in palabra_adivinar and
                 arriesgo[indice] != palabra_adivinar[indice] and
                 ((palabra_pintada.count(obtener_color("Amarillo") + arriesgo[indice]) +
-                  (palabra_pintada.count(obtener_color("Verde") + arriesgo[indice]))
-                 ) < cantidad_letras[arriesgo[indice]])):
+                  (palabra_pintada.count(obtener_color("Verde") + arriesgo[indice])))
+                 < cantidad_letras[arriesgo[indice]])):
             palabra_pintada = palabra_pintada.replace(
                 obtener_color("GrisOscuro") +
                 arriesgo[indice], obtener_color("Amarillo") + arriesgo[indice], 1) + " "
@@ -250,6 +253,7 @@ def validar_palabra(arriesgo):
         arriesgo = input("Arriesgo: ").upper()
 
     return (sin_acentos(arriesgo)).upper()
+
 
 def puntos_jugadores(jugador_arranca, ganador, dict_jugadores, intentos):
     """
@@ -366,7 +370,6 @@ def logica_juego(dict_jugadores):
     imprimir_puntos_partida(puntos_partida, dict_jugadores)
 
 
-
 def rejugabilidad():
     """
     Funcion principal que ejecuta el juego. Permite jugar multiples partidas(logica_juego)
@@ -384,12 +387,13 @@ def rejugabilidad():
         cant_partidas = 1
         lista_partidas = []
 
-        while (jugar_denuevo and cant_partidas <= MAX_PARTIDAS):
+        while jugar_denuevo and cant_partidas <= MAX_PARTIDAS:
             logica_juego(dict_info_jugadores)
             fecha_partida = datetime.now()
-            partidas.actualizar_lista_partida(lista_partidas, cant_partidas, dict_info_jugadores, fecha_partida.strftime("%d/%m/%Y"), fecha_partida.strftime("%H:%M:%S"))
+            partidas.actualizar_lista_partida(lista_partidas, cant_partidas, dict_info_jugadores,
+                                              fecha_partida.strftime("%d/%m/%Y"), fecha_partida.strftime("%H:%M:%S"))
             cant_partidas += 1
-            if (cant_partidas <= MAX_PARTIDAS):
+            if cant_partidas <= MAX_PARTIDAS:
                 desea_seguir = (input('Jugar de nuevo (S/N): ')).upper()
                 while desea_seguir not in 'SN':
                     desea_seguir = (input('Error solo se acepta (S/N): ')).upper()
@@ -406,5 +410,6 @@ def rejugabilidad():
         print('Gracias por jugar!')
     else:
         print('SE NECESITAN DOS JUGADORES PARA JUGAR!')
+
 
 rejugabilidad()
