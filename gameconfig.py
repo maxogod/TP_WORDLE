@@ -16,7 +16,7 @@ def config_dic_mod(config_file, config_dic):
     #Maximo Utrera
     """
     min_long_palabra = 3
-    max_long_palabra = 15
+    max_long_palabra = 12
     min_max_partida = 2
     max_max_partida = 10
     try:

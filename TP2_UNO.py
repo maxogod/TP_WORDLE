@@ -295,7 +295,12 @@ def seleccionar_ganador(dict_jugadores):
     Retorna una tupla con el nombre y los datos del ganador.
     #Florencia Russo
     """
-    return (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse=True))[0]
+    jugadores_l = (sorted(dict_jugadores.items(), key=lambda jugador: jugador[1]['puntos'], reverse=True))
+    if jugadores_l[0][1]['puntos'] != jugadores_l[1][1]['puntos']:
+        ganador = jugadores_l[0]
+    else:
+        ganador = ['empate', jugadores_l[0][1]['puntos']]
+    return ganador
 
 
 def imprimir_puntos_partida(puntos_partida, dict_jugadores):
@@ -393,9 +398,12 @@ def rejugabilidad():
                     jugar_denuevo = False
 
         partidas.imprimir_y_guardar_info_partidas_jugadas(lista_partidas, REINICIO_ARCHIVO_PARTIDAS)
-        print('\nGracias por jugar!')
         ganador = seleccionar_ganador(dict_info_jugadores)
-        print(f"El ganador es {ganador[0].upper()} con un total de {ganador[1]['puntos']} puntos")
+        if ganador[0] != 'empate':
+            print(f"\nEl ganador es {ganador[0].upper()} con un total de {ganador[1]['puntos']} puntos")
+        else:
+            print(f"\nEMPATE! hubo un empate con {ganador[1]} puntos!")
+        print('Gracias por jugar!')
     else:
         print('SE NECESITAN DOS JUGADORES PARA JUGAR!')
 

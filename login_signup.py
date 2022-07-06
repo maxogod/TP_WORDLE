@@ -26,7 +26,7 @@ def read_file(filename):
     return line.rstrip('\n').split(',') if line else ['', '']
 
 
-def validacion_usuario_para_login(username, password):
+def validacion_usuario_para_login(username, password, solo_username):
     """
     Abre el archivo de usuarios y corrobora que el nombre de usuario se encuentre en este,
     asi como la contraseña sea correcta.
@@ -38,7 +38,8 @@ def validacion_usuario_para_login(username, password):
         while username_leido and username != username_leido:
             username_leido, password_leido = read_file(users_file)
 
-    return username == username_leido and password == password_leido and Jugadores.p1 != username
+    return (username == username_leido if solo_username 
+            else username == username_leido and password == password_leido and Jugadores.p1 != username)
 
 
 def emergentwindow(username, password):
@@ -46,11 +47,13 @@ def emergentwindow(username, password):
     si se valido el usuario y contraseña llama a funcion successwindow sino a errorwindow.
     #Maximo Utrera
     """
-    if validacion_usuario_para_login(username, password):
+    if validacion_usuario_para_login(username, password, False) and username != Jugadores.p1:
         Jugadores(username)
         successwindow()
+    elif username == Jugadores.p1:
+        errorwindow('already logged')
     else:
-        errorwindow()
+        errorwindow('wrong info')
 
 
 def successwindow():
@@ -64,12 +67,14 @@ def successwindow():
         messagebox.showinfo('Success', 'Jugador 2 logueado correctamente. A JUGAR!\n(ya pueden cerrar el login)')
 
 
-def errorwindow():
+def errorwindow(tipo):
     """
     muestra mensaje de error al loguearse en una ventana.
     #Maximo Utrera
     """
-    messagebox.showerror('Error', 'Error, El usuario o la contraceña no son correctos.')
+    posibles_casos = {'already logged': 'Error, El usuario ya esta logueado.',
+                      'wrong info': 'Error, El usuario o la contraceña no son correctos.'}
+    messagebox.showerror('Error', posibles_casos[tipo])
 
 
 def aplicar_login(username, password, usernameEntry, passwordEntry):
@@ -125,7 +130,7 @@ def registrar_nuevo_usuario(usuario, clave, clave2, nombre_archivo):
         emergent_windows_registro('error', usuario, 'claves diferentes')
     elif not validar_clave(clave):
         emergent_windows_registro('error', usuario, 'clave invalida')
-    elif not validacion_usuario_para_login(usuario, clave):
+    elif not validacion_usuario_para_login(usuario, clave, True):
         with open(nombre_archivo, 'a', encoding="utf8") as archivo:
             archivo.write(f'{usuario},{clave}\n')
         emergent_windows_registro('info', usuario, 'usuario creado')
